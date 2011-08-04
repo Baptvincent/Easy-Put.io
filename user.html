@@ -1,0 +1,35 @@
+<script>
+    Putio.User.info(function(data){
+        var results=data.response.results[0];
+        function togb(value){
+            value=Math.round((parseInt(value)/(1024*1024*1024))*100)/100
+            return value;
+        }
+        
+        results.disk_quota=togb(results.disk_quota)
+        results.disk_quota_available=togb(results.disk_quota_available)
+        results.bw_quota_available=togb(results.bw_quota_available)
+        results.bw_avail_last_month=togb(results.bw_avail_last_month)
+        results.shared_space=togb(results.shared_space)
+        $("#info_data").append('<div class="info">'+results.name+'</div>');
+        $("#info_data").append('<div class="info">'+results.disk_quota_available+' GB / '+results.disk_quota+'GB</div>');
+        $("#info_data").append('<div class="info">'+results.bw_quota_available+' GB</div>');
+        $("#info_data").append('<div class="info">'+results.bw_avail_last_month+' GB</div>');
+        $("#info_data").append('<div class="info">'+results.friends_count+'</div>');
+        $("#info_data").append('<div class="info">'+results.shared_items+'</div>');
+        $("#info_data").append('<div class="info">'+results.shared_space+' GB</div>');
+    });
+</script>
+<div>
+    <div id="info_name">
+        <div class="info">Username:</div>
+        <div class="info">Available Storage</div>
+        <div class="info">Available Bandwidth</div>
+        <div class="info">Inherited from last month:</div>
+        <div class="info">Friends:</div>
+        <div class="info">Shared Items:</div>
+        <div class="info">Shared Space:</div>
+    </div>
+    <div id="info_data">
+    </div>
+</div>

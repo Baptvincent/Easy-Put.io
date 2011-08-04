@@ -1,0 +1,87 @@
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"> </script>
+<script type="text/javascript" src="js/jquery.inc.js"></script>
+<script type="text/javascript" src="js/function.js"></script>
+<script type="text/javascript" src="js/putio.js"></script>
+<script>
+
+    //"selection",
+function sendtoputio(url, folder_id){
+    var urls = [];
+                    urls.push(url);
+                    Putio.Url.analyze(urls,function(data){
+                        var results=data.response.results.items;
+                        var urls = [];
+                        $.each(results.error,function(index, value){
+                            var notification = webkitNotifications.createNotification(
+                            'img/icon128.png',
+                            value.url,
+                            value.error
+                        );
+                            notification.show();
+                            setTimeout( function () {  notification.cancel(); }, 4000);
+                        })
+                        $.each(results.singleurl,function(index, value){
+                            urls.push(value.url);
+                            Putio.Transfer.add(urls,folder_id,function(data){
+                                results=data.response.results[0];
+                                if (results.name!=null){
+                                    var notification = webkitNotifications.createNotification(
+                                    'img/icon128.png',
+                                    results.name,
+                                    'is '+results.status
+                                );
+                                    notification.show();
+                                    setTimeout( function () {  notification.cancel(); }, 4000);
+                                }
+                                else{
+                                    Putio._message("download url is not valid","error");
+                                    var notification = webkitNotifications.createNotification(
+                                    'img/icon128.png',
+                                    'download url is not valid'
+                                );
+                                    notification.show();
+                                    setTimeout( function () {  notification.cancel(); }, 4000);
+                                }
+                            })
+                        })
+                    })
+}
+
+
+    function folderlist(folder,parent_tab_id){
+        var contexts = ["selection","link"];
+        if(folder.dirs[0]){
+            chrome.contextMenus.create({"parentId": parent_tab_id,"title": "/","contexts":contexts,
+                "onclick": function(data) {
+                    if(data.linkUrl)var url=data.linkUrl
+                    else var url=data.selectionText
+                    sendtoputio(url,folder.id);
+                }
+            });
+        }
+        $.each(folder.dirs,function(index, value){
+            var parent_id=chrome.contextMenus.create({"parentId": parent_tab_id,"title": value.name,"contexts":contexts,
+                "onclick": function(data) {
+                    if(data.linkUrl)var url=data.linkUrl
+                    else var url=data.selectionText
+                    sendtoputio(url,value.id);
+                }
+            });
+            folderlist(value,parent_id);
+        })
+
+    };
+
+
+    Putio.File.dirmap(function(data){
+        var results=data.response.results;
+        var contexts = ["selection","link"];
+        var parent_tab_id=chrome.contextMenus.create({"title": "Send to Put.io","contexts":contexts,
+                "onclick": function(data) {
+                    if(data.linkUrl)var url=data.linkUrl
+                    else var url=data.selectionText
+                    sendtoputio(url,'0');
+                }});
+        folderlist(results,parent_tab_id);
+    });
+</script>
