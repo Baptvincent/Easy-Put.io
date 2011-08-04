@@ -1,11 +1,11 @@
 body {
     margin: 0px;
     padding: 0px;
-    overflow-x:hidden;
     font:normal 14px Arial, Helvetica, sans-serif;
     color:#605f5f;
     width: 450px;
     min-height: 120px;
+    overflow:auto;
 }
 body a {
     text-decoration:none;
@@ -50,7 +50,7 @@ body a {
 }
 
 #link{
-    width: 360px;
+    width: 380px;
     float: left;
 }
 #logoputio{
@@ -78,8 +78,7 @@ body a {
 }
 
 #spinner{
-    width: 70px;
-    text-align: center;
+    text-align: left;
     padding-top: 5px;
     font-size: 11px;
     text-align: center;
@@ -203,4 +202,18 @@ body a {
 .info{
     font-size: 11px;
     margin-bottom: 5px;
+}
+
+#messages_list a{
+    font-size: 12px;
+}
+#messages_list{
+    font-size: 12px;
+    overflow:auto;
+    height: 400px;
+}
+
+.message{
+    border-bottom: 1px dotted #CCC;
+    padding: 5px;
 }

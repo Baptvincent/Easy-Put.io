@@ -56,6 +56,20 @@ Putio = {
             });
         }
     },
+    Message : {
+        list : function(output) {
+            Putio._request('messages', 'list','',function(data){
+                output(data);
+            });
+        },
+        del : function(transfert_id,output) {
+            Putio._request('messages', 'delete', {
+                'id' : transfert_id
+            },function(data){
+                output(data);
+            });
+        }
+    },
 
     File : {
         dirmap : function(output) {
