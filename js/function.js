@@ -20,6 +20,26 @@ Function = {
             return $1.toUpperCase();
         });
     },
+
+    quoteUrl: function (url, safe) {
+    if (typeof(safe) !== 'string') {
+        safe = '/';    // Don't escape slashes by default
+    }
+    url = url.replace(/'/g, "\\'");
+    url = encodeURIComponent(url);
+
+    // Unescape characters that were in the safe list
+    toUnencode = [  ];
+    for (var i = safe.length - 1; i >= 0; --i) {
+        var encoded = encodeURIComponent(safe[i]);
+        if (encoded !== safe.charAt(i)) {    // Ignore safe char if it wasn't escaped
+            toUnencode.push(encoded);
+        }
+    }
+
+    url = url.replace(new RegExp(toUnencode.join('|'), 'ig'), decodeURIComponent);
+     return url;
+},
     
     folderlist:function(padding,folder){
         $.each(folder.dirs,function(index, value){
@@ -114,5 +134,20 @@ Function = {
         this.time=setTimeout( function () {
             Function.transfert_list();
         }, 2000);
+    },
+
+    extract_url : function(url){
+        var regex = /([\w]+:\/\/[\w-?\%&;#~=\.\/\@\:\[\]\(\)\{\}\|]+[\w\/\[\]\(\)\{\}])/gi;
+        var urls = url.match(regex)
+
+        if (!urls){
+                Putio._message('Please only enter links starting with: http:// https:// ftp:// ','error');
+                return;
+            }
+
+        return urls
     }
+            
+
+
 }

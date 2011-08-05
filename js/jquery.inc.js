@@ -159,7 +159,7 @@ $(document).ready(function() {
 
     $("#send").live("click", function(){
         Function.clear_error();
-        var url=$('input[name=url]').attr('value');
+        var url=$('textarea[name=url]').attr('value');
         var title=$('input[name=title]').attr('value');
         var lang=$('input[name=lang]').attr('value');
         var source=$('input[name=source]').attr('value');
@@ -169,33 +169,27 @@ $(document).ready(function() {
         }
         else{
             if(url!=''){
-                //url =toString(url);
-                //Putio.Url.extracturls(url,function(data){
-                //console.log(data);
-                //})
                 
-                var urls = [];
-                //urls.push('http://www.megaupload.com/?d=TK9CCPYG');
-                urls.push(url);
+                var urls=Function.extract_url(url)
                 Putio.Url.analyze(urls,function(data){
+
                     var folder_id=$('select[name=folder_id]').attr('value');
-                    results=data.response.results.items;
-                    var urls = [];
-                    $.each(results.error,function(index, value){
+                    var results=data.response.results.items;
+                    var good_urls=[];
+                    
+                    $.each(results.error,function(index, value){//lien envoyé est mort
                         Putio._message(value.url+" : <br>"+value.error,"error");
                     })
+
                     $.each(results.singleurl,function(index, value){
-                        urls.push(value.url);
-                        Putio.Transfer.add(urls,folder_id,function(data){
-                            results=data.response.results[0];
-                            if (results.name!=null){
-                                Putio._message(results.name+" is "+results.status,"good");
-                            }
-                            else{
-                                Putio._message("download url is not valid","error");
-                            }
-                        })
+                        good_urls.push(value.url);
                     })
+                    Putio.Transfer.add(good_urls,folder_id,function(data){
+                        $.each(data.response.results,function(index, value){
+                                Putio._message(value.name+" is "+value.status,"good");
+                            })
+                    })
+                    
                 })
             }
             else if(title!=''){

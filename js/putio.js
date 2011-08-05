@@ -171,13 +171,18 @@ Putio = {
         var request = Putio.ApiRequest(api_key, api_secret, params);
         url+="&request="+request;
 
+        var chars = "abcdefghiklmnopqrstuvwxyz";
+        var rnum = Math.floor(Math.random() * chars.length);
+        var randomstring = '';
+        randomstring += chars.substring(rnum,rnum+1);
+
         $.ajax({
 
             url: url,
-            type: 'GET',
+            type: 'POST',
             crossDomain: true,
             dataType: 'jsonp',
-            jsonpCallback:'h',
+            jsonpCallback:randomstring,
             async:false,
             success: function(data) {
                 $('#spinner').hide();
@@ -191,7 +196,7 @@ Putio = {
                 $('#spinner').hide();
                 Putio._message("An error ocurred on calling the method <b>" +
                     method + "</b> in path <b>" + page + "</b> with message: <b>"+
-                    data.error_message+"</b>");
+                    data.error_message+"</b>",'error');
             }
         });
 

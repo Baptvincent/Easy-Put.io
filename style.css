@@ -6,6 +6,7 @@ body {
     width: 450px;
     min-height: 120px;
     overflow:auto;
+    overflow-x:hidden;
 }
 body a {
     text-decoration:none;
@@ -26,7 +27,7 @@ body a {
     text-align: center;
 }
 .inputtext{
-    width: 250px;
+    width: 350px;
 }
 #header a:hover, #header a.active{
     background: -webkit-gradient( linear, left bottom, left top, color-stop(0, #EEE), color-stop(1, #DDD) );
@@ -50,7 +51,7 @@ body a {
 }
 
 #link{
-    width: 380px;
+    width: 390px;
     float: left;
 }
 #logoputio{
@@ -209,8 +210,6 @@ body a {
 }
 #messages_list{
     font-size: 12px;
-    overflow:auto;
-    height: 400px;
 }
 
 .message{

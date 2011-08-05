@@ -3,49 +3,56 @@
 <script type="text/javascript" src="js/function.js"></script>
 <script type="text/javascript" src="js/putio.js"></script>
 <script>
-
     //"selection",
-function sendtoputio(url, folder_id){
-    var urls = [];
-                    urls.push(url);
-                    Putio.Url.analyze(urls,function(data){
-                        var results=data.response.results.items;
-                        var urls = [];
-                        $.each(results.error,function(index, value){
-                            var notification = webkitNotifications.createNotification(
-                            'img/icon128.png',
-                            value.url,
-                            value.error
-                        );
-                            notification.show();
-                            setTimeout( function () {  notification.cancel(); }, 4000);
-                        })
-                        $.each(results.singleurl,function(index, value){
-                            urls.push(value.url);
-                            Putio.Transfer.add(urls,folder_id,function(data){
-                                results=data.response.results[0];
-                                if (results.name!=null){
-                                    var notification = webkitNotifications.createNotification(
-                                    'img/icon128.png',
-                                    results.name,
-                                    'is '+results.status
-                                );
-                                    notification.show();
-                                    setTimeout( function () {  notification.cancel(); }, 4000);
-                                }
-                                else{
-                                    Putio._message("download url is not valid","error");
-                                    var notification = webkitNotifications.createNotification(
-                                    'img/icon128.png',
-                                    'download url is not valid'
-                                );
-                                    notification.show();
-                                    setTimeout( function () {  notification.cancel(); }, 4000);
-                                }
-                            })
-                        })
-                    })
-}
+    function extract_url(url){
+        var regex = /([\w]+:\/\/[\w-?\%&;#~=\.\/\@\:\[\]\(\)\{\}\|]+[\w\/\[\]\(\)\{\}])/gi;
+        var urls = url.match(regex)
+
+        if (!urls){
+            var notification = webkitNotifications.createNotification(
+                        'img/icon128.png',
+                        'Please only enter links starting with: http:// https:// ftp://' ,
+                        ''
+                    );
+                        notification.show();
+                        setTimeout( function () {  notification.cancel(); }, 4000);
+                return;
+            }
+
+        return urls
+    }
+
+
+    function sendtoputio(url, folder_id){
+        var urls=extract_url(url)
+        Putio.Url.analyze(urls,function(data){
+            var results=data.response.results.items;
+            var good_urls = [];
+            $.each(results.error,function(index, value){
+                var notification = webkitNotifications.createNotification(
+                'img/icon128.png',
+                value.url,
+                value.error
+            );
+                notification.show();
+                setTimeout( function () {  notification.cancel(); }, 4000);
+            })
+            $.each(results.singleurl,function(index, value){
+                good_urls.push(value.url);
+            })
+            Putio.Transfer.add(good_urls,folder_id,function(data){
+                $.each(data.response.results,function(index, value){
+                    var notification = webkitNotifications.createNotification(
+                        'img/icon128.png',
+                        value.name,
+                        'is '+value.status
+                    );
+                        notification.show();
+                        setTimeout( function () {  notification.cancel(); }, 4000);
+                })
+            })
+        })
+    }
 
 
     function folderlist(folder,parent_tab_id){
@@ -77,11 +84,11 @@ function sendtoputio(url, folder_id){
         var results=data.response.results;
         var contexts = ["selection","link"];
         var parent_tab_id=chrome.contextMenus.create({"title": "Send to Put.io","contexts":contexts,
-                "onclick": function(data) {
-                    if(data.linkUrl)var url=data.linkUrl
-                    else var url=data.selectionText
-                    sendtoputio(url,'0');
-                }});
+            "onclick": function(data) {
+                if(data.linkUrl)var url=data.linkUrl
+                else var url=data.selectionText
+                sendtoputio(url,'0');
+            }});
         folderlist(results,parent_tab_id);
     });
 </script>
