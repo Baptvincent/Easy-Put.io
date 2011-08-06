@@ -7,6 +7,8 @@ Function = {
         clearTimeout(this.time);
         $(".content").load(id+'.html', function(){
             });
+        $("#link a").attr('class','inactive');
+        $("#"+id).attr('class','active');
     },
 
     clear_error:function (){
@@ -20,6 +22,11 @@ Function = {
             return $1.toUpperCase();
         });
     },
+
+    tomb:function(value){
+            value=Math.round((parseInt(value)/(1024*1024))*100)/100
+            return value;
+        },
 
     quoteUrl: function (url, safe) {
     if (typeof(safe) !== 'string') {
@@ -50,6 +57,7 @@ Function = {
 
     gotofolder : function(id){
         Putio.File.info(id,function(data){
+            console.log(data)
             if (id!='0'){
                 var results=data.response.results[0]
                 var name=results.name
@@ -61,6 +69,7 @@ Function = {
                 $("#root").html('<input name="parent_id" value="0" type="hidden"/>');
             }
             Putio.File.list(id,function(data){
+                console.log(data)
                 name=Function.ucwords(name)
                 $("#root").append('<div class="dirtitle" ><b></b></div><div '+
                     'class="edit"><img class="create" title="create" id="'+
@@ -89,7 +98,7 @@ Function = {
                     }
                     else{
                         $("#root").append('<div class="item" ><div class="'+
-                            'files" id="'+user_id+'/'+value.id+'"><a href="#">'+
+                            'files" download_url="'+value.download_url+'"><a href="#">'+
                             '<img class="file_icon" src="'+value.file_icon_url+
                             '"/><span id="name_'+value.id+'"></span></a></div>'+
                             '<div class="edit"><img class="rename" title='+
@@ -98,7 +107,7 @@ Function = {
                             'src="img/move.png"/><img class="delete" title='+
                             '"delete" id="'+value.id+'" src="img/delete.png"/>'+
                             '</div></div>');
-                        $("#name_"+value.id).text(' '+value.name).html();
+                        $("#name_"+value.id).text(' '+value.name+' ('+Function.tomb(value.size)+' MB)').html();
                         $("#name_"+value.id).attr('name',value.name);
                     }
                 })

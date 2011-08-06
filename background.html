@@ -24,6 +24,14 @@
 
 
     function sendtoputio(url, folder_id){
+    var notification = webkitNotifications.createNotification(
+                        'img/icon128.png',
+                        'Request Send',
+                        ''
+                    );
+                        notification.show();
+                        setTimeout( function () {  notification.cancel(); }, 4000);
+
         var urls=extract_url(url)
         Putio.Url.analyze(urls,function(data){
             var results=data.response.results.items;

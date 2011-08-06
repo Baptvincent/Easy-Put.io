@@ -29,22 +29,21 @@ body a {
 .inputtext{
     width: 350px;
 }
-#header a:hover, #header a.active{
-    background: -webkit-gradient( linear, left bottom, left top, color-stop(0, #EEE), color-stop(1, #DDD) );
+#header a:hover{
+    color: #FFFFFF;
 }
 
 #header a {
-    color: #666;
     text-decoration: none;
-    text-shadow: 0 1px 0 white;
     display: block;
     float: left;
     /*border-left: 1px solid #DDD;*/
     border-right: 1px solid white;
     padding: 3px 6px;
 }
+
 #header {
-    background: -webkit-gradient( linear, left bottom, left top, color-stop(0, #DDD), color-stop(1, #EEE) );
+    background-color: #3D4149;
     overflow: auto;
     padding-left: 5px;
     position: relative;
@@ -54,6 +53,13 @@ body a {
     width: 390px;
     float: left;
 }
+.active{
+    color: #FFFFFF;
+}
+.inactive{
+    color: #B2B2B2;
+}
+
 #logoputio{
     float: left;
     padding-top: 2px;
@@ -95,7 +101,7 @@ body a {
     font-size: 12px;
 }
 
-#root a:hover, #header a.active{
+#root a:hover{
     text-decoration: underline;
 }
 

@@ -33,10 +33,10 @@ $(document).ready(function() {
     $(".files").live("click", function(){
         Function.clear_error();
 
-        var parent_id = $(this).attr("id");
+        var download_url = $(this).attr("download_url");
         chrome.tabs.getSelected(undefined,function(data){
             chrome.tabs.update(data.id, {
-                url:'https://put.io/download-file/'+parent_id
+                url:download_url
             });
         });
     });
@@ -169,10 +169,11 @@ $(document).ready(function() {
         }
         else{
             if(url!=''){
-                
+                console.log(url)
                 var urls=Function.extract_url(url)
+                console.log(urls)
                 Putio.Url.analyze(urls,function(data){
-
+                    console.log(data)
                     var folder_id=$('select[name=folder_id]').attr('value');
                     var results=data.response.results.items;
                     var good_urls=[];
