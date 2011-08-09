@@ -170,6 +170,7 @@ $(document).ready(function() {
         else{
             if(url!=''){
                 var urls=Function.extract_url(url)
+                console.log(urls)
                 Putio.Url.analyze(urls,function(data){
                     console.log(data)
                     var folder_id=$('select[name=folder_id]').attr('value');
