@@ -9,6 +9,7 @@ Function = {
             });
         $("#link a").attr('class','inactive');
         $("#"+id).attr('class','active');
+        localStorage["id"] = id;
     },
 
     clear_error:function (){

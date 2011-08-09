@@ -43,15 +43,6 @@ Background = {
 
 
     sendtoputio:function (url, folder_id){
-        var notification = webkitNotifications.createNotification(
-            'img/icon128.png',
-            'Request Sent',
-            ''
-            );
-        notification.show();
-        setTimeout( function () {
-            notification.cancel();
-        }, 4000);
         var urls=Background.extract_url(url)
         Putio.Url.analyze(urls,function(data){
             var results=data.response.results.items;
@@ -69,22 +60,30 @@ Background = {
             })
             $.each(results.singleurl,function(index, value){
                 good_urls.push(value.url);
-            })
-            $.each(results.torrent,function(index, value){
-                good_urls.push(value.url);
-            })
-            Putio.Transfer.add(good_urls,folder_id,function(data){
-                $.each(data.response.results,function(index, value){
-                    var notification = webkitNotifications.createNotification(
+                var notification = webkitNotifications.createNotification(
                         'img/icon128.png',
-                        value.name,
-                        'is '+value.status
+                        'Request Sent for',
+                        value.name
                         );
                     notification.show();
                     setTimeout( function () {
                         notification.cancel();
                     }, 4000);
-                })
+            })
+            $.each(results.torrent,function(index, value){
+                good_urls.push(value.url);
+                var notification = webkitNotifications.createNotification(
+                        'img/icon128.png',
+                        'Request Sent for',
+                        value.name
+                        );
+                    notification.show();
+                    setTimeout( function () {
+                        notification.cancel();
+                    }, 4000);
+            })
+            Putio.Transfer.add(good_urls,folder_id,function(data){
+             
             })
         })
     },

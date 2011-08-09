@@ -172,10 +172,10 @@ $(document).ready(function() {
                 var urls=Function.extract_url(url)
                 console.log(urls)
                 Putio.Url.analyze(urls,function(data){
-                    console.log(data)
                     var folder_id=$('select[name=folder_id]').attr('value');
                     var results=data.response.results.items;
                     var good_urls=[];
+                    var good_name=[];
                     
                     $.each(results.error,function(index, value){//lien envoyé est mort
                         Putio._message(value.url+" : <br>"+value.error,"error");
@@ -183,14 +183,19 @@ $(document).ready(function() {
 
                     $.each(results.singleurl,function(index, value){
                         good_urls.push(value.url);
+                        good_name.push(value.name);
                     })
                     $.each(results.torrent,function(index, value){
                         good_urls.push(value.url);
+                        good_name.push(value.name);
                     })
-                    Putio.Transfer.add(good_urls,folder_id,function(data){
-                        $.each(data.response.results,function(index, value){
-                                Putio._message(value.name+" is "+value.status,"good");
+
+                    $.each(good_name,function(index, value){
+                                Putio._message(value,"good");
                             })
+                            console.log(good_urls)
+                            console.log(good_name)
+                    Putio.Transfer.add(good_urls,folder_id,function(data){
                     })
                     
                 })
@@ -213,5 +218,5 @@ $(document).ready(function() {
 
     });
 
-    Function.go('grab');
+    Function.go(localStorage["id"] || 'grab');
 });
