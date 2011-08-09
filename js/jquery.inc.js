@@ -169,9 +169,7 @@ $(document).ready(function() {
         }
         else{
             if(url!=''){
-                console.log(url)
                 var urls=Function.extract_url(url)
-                console.log(urls)
                 Putio.Url.analyze(urls,function(data){
                     console.log(data)
                     var folder_id=$('select[name=folder_id]').attr('value');
@@ -183,6 +181,9 @@ $(document).ready(function() {
                     })
 
                     $.each(results.singleurl,function(index, value){
+                        good_urls.push(value.url);
+                    })
+                    $.each(results.torrent,function(index, value){
                         good_urls.push(value.url);
                     })
                     Putio.Transfer.add(good_urls,folder_id,function(data){
