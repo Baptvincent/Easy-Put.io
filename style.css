@@ -111,17 +111,19 @@ body a {
 }
 .dirtitle{
     float: left;
-    width: 400px;
+    width: 385px;
+    padding-bottom: 2px;
+    padding-top: 2px;
 }
 
 .folder{
     float: left;
-    width: 400px;
+    width: 385px;
 }
 
 .files{
     float: left;
-    width: 400px;
+    width: 385px;
 }
 
 .edit{
@@ -131,7 +133,7 @@ body a {
 }
 
 .edit_transfert{
-    width: 450px;
+    width: 435px;
     position: absolute;
     text-align: right;
 }
@@ -178,7 +180,7 @@ body a {
 }
 
 .download{
-    width: 450px;
+    width: 435px;
     background-color: #ECECEC;
     height: 25px;
     float: left;
@@ -216,9 +218,14 @@ body a {
 }
 #messages_list{
     font-size: 12px;
+    width: 435px;
 }
 
 .message{
     border-bottom: 1px dotted #CCC;
     padding: 5px;
+}
+
+#search_query{
+    width: 400px;
 }

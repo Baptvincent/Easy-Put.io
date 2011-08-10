@@ -133,6 +133,16 @@ Putio = {
             Putio._request('files', 'create_dir', params,function(data){
                 output(data);
             });
+        },
+        search : function(query,output) {
+            var params = {
+                'query': query
+
+            };
+
+            Putio._request('files', 'search', params,function(data){
+                output(data);
+            });
         }
     },
 

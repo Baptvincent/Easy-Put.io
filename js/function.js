@@ -58,7 +58,6 @@ Function = {
 
     gotofolder : function(id){
         Putio.File.info(id,function(data){
-            console.log(data)
             if (id!='0'){
                 var results=data.response.results[0]
                 var name=results.name
@@ -70,7 +69,6 @@ Function = {
                 $("#root").html('<input name="parent_id" value="0" type="hidden"/>');
             }
             Putio.File.list(id,function(data){
-                console.log(data)
                 name=Function.ucwords(name)
                 $("#root").append('<div class="dirtitle" ><b></b></div><div '+
                     'class="edit"><img class="create" title="create" id="'+
@@ -116,6 +114,43 @@ Function = {
         });
     },
 
+    search : function(query){
+        Putio.File.search(query,function(data){
+                var results=data.response.results;
+                $("#root").html('<input name="search_id" value="'+query+'" type="hidden"/>');
+                $.each(results,function(index, value){
+                    value.name=String(value.name);
+                    if(value.type=='folder'){
+                        $("#root").append('<div class="item"><div class='+
+                            '"folder" id="'+value.id+'"><a href=# ><img class='+
+                            '"file_icon" src="'+value.file_icon_url+'"/><span '+
+                            'id="name_'+value.id+'"></span></a></div><div class='+
+                            '"edit"><img class="rename" title="rename" id="'+
+                            value.id+'" src="img/rename.png"/><img class="move" '+
+                            'title="move" id="'+value.id+'" src="img/move.png"/>'+
+                            '<img class="delete" title="delete" id="'+value.id+
+                            '" src="img/delete.png"/></div></div>');
+                        $("#name_"+value.id).text(' '+value.name).html();
+                        $("#name_"+value.id).attr('name',value.name);
+                    }
+                    else{
+                        $("#root").append('<div class="item" ><div class="'+
+                            'files" download_url="'+value.download_url+'"><a href="#">'+
+                            '<img class="file_icon" src="'+value.file_icon_url+
+                            '"/><span id="name_'+value.id+'"></span></a></div>'+
+                            '<div class="edit"><img class="rename" title='+
+                            '"rename" id="'+value.id+'" src="img/rename.png"/>'+
+                            '<img class="move" title="move" id="'+value.id+'" '+
+                            'src="img/move.png"/><img class="delete" title='+
+                            '"delete" id="'+value.id+'" src="img/delete.png"/>'+
+                            '</div></div>');
+                        $("#name_"+value.id).text(' '+value.name+' ('+Function.tomb(value.size)+' MB)').html();
+                        $("#name_"+value.id).attr('name',value.name);
+                    }
+                })
+            });
+    },
+
     transfert_list : function(){
         Function.clear_error();
         Putio.Transfer.list(function(data){
@@ -130,7 +165,7 @@ Function = {
                 $("#root").html('');
                 $.each(results.results,function(index, value){
                     value.percent_done=parseInt(value.percent_done)
-                    var percent_done=(value.percent_done*450)/100
+                    var percent_done=(value.percent_done*435)/100
                     $("#root").append('<div class="download"><div class="'+
                         'percent_done" style="width:'+percent_done+'px">&nbsp;'+
                         '</div><div class="download_info"><b>'+value.name+'</b></br>'+

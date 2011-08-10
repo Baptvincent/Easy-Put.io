@@ -95,18 +95,26 @@ $(document).ready(function() {
     $("#valid").live("click", function(){
         var id=$(this).attr("value");
         var type=$(this).attr("type");
+        var query=$('input[name=search_id]').attr('value');
         var parent_id=$('input[name=parent_id]').attr('value')
         switch (type) {
             case 'create':
                 var value=$('#input_value').attr("value");
                 Putio.File.create_dir(id,value,function(data){
+                    if(data.error==true){
+                        Putio._message(data.error_message,"error");
+                    }
                     Function.gotofolder(parent_id);
                 })
                 break;
             case 'rename':
                 var value=$('#input_value').attr("value");
                 Putio.File.rename(id,value,function(data){
-                    Function.gotofolder(parent_id);
+                    if(data.error==true){
+                        Putio._message(data.error_message,"error");
+                    }
+                    if (query)Function.search(query);
+                    else Function.gotofolder(parent_id);
                 })
                 break;
             case 'delete':
@@ -114,7 +122,8 @@ $(document).ready(function() {
                     if(data.error==true){
                         Putio._message(data.error_message,"error");
                     }
-                    Function.gotofolder(parent_id);
+                    if (query)Function.search(query);
+                    else Function.gotofolder(parent_id);
                 })
                 break;
             case 'move':
@@ -123,7 +132,8 @@ $(document).ready(function() {
                     if(data.error==true){
                         Putio._message(data.error_message,"error");
                     }
-                    Function.gotofolder(parent_id);
+                    if (query)Function.search(query);
+                    else Function.gotofolder(parent_id);
                 })
                 break;
             case 'cancel':
@@ -157,6 +167,21 @@ $(document).ready(function() {
         }
     });
 
+    $("#search_query").live("click",function(event){
+        var query=$('#search_query').attr('value');
+        if(query=='search')$('#search_query').attr('value','');
+    });
+
+    $("#search_query").live("keypress",function(event){
+        if(event.keyCode == 13){
+            $("#send_search").click();
+        }
+    });
+    $("#send_search").live("click",function(event){
+        var query=$('#search_query').attr('value');
+        Function.search(query);
+    });
+
     $("#send").live("click", function(){
         Function.clear_error();
         var url=$('textarea[name=url]').attr('value');
@@ -170,7 +195,6 @@ $(document).ready(function() {
         else{
             if(url!=''){
                 var urls=Function.extract_url(url)
-                console.log(urls)
                 Putio.Url.analyze(urls,function(data){
                     var folder_id=$('select[name=folder_id]').attr('value');
                     var results=data.response.results.items;
@@ -191,12 +215,10 @@ $(document).ready(function() {
                     })
 
                     $.each(good_name,function(index, value){
-                                Putio._message(value,"good");
-                            })
-                            console.log(good_urls)
-                            console.log(good_name)
-                    Putio.Transfer.add(good_urls,folder_id,function(data){
+                        Putio._message(value,"good");
                     })
+                    Putio.Transfer.add(good_urls,folder_id,function(data){
+                        })
                     
                 })
             }
@@ -206,10 +228,7 @@ $(document).ready(function() {
                     $.each(results,function(index, value){
                         var test=value.Description.indexOf("www.megaupload.com/?d=",'0')
                         if(test>=0){
-                            console.log(value.Description);
-                            console.log(test);
                             value.Description=value.Description.substring(test,37)
-                            console.log(value.Description);
                         }
                     })
                 })
