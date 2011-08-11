@@ -1,6 +1,6 @@
 {
   "name": "Easy Put.io",
-  "version": "1.6.9",
+  "version": "1.7",
   "description": "Send links to download on Put.io",
   "browser_action": {
     "default_icon": "img/icon16.png",

@@ -24,29 +24,11 @@ Function = {
         });
     },
 
-    tomb:function(value){
-        value=Math.round((parseInt(value)/(1024*1024))*100)/100
-        return value;
-    },
-
-    quoteUrl: function (url, safe) {
-        if (typeof(safe) !== 'string') {
-            safe = '/';    // Don't escape slashes by default
-        }
-        url = url.replace(/'/g, "\\'");
-        url = encodeURIComponent(url);
-
-        // Unescape characters that were in the safe list
-        toUnencode = [  ];
-        for (var i = safe.length - 1; i >= 0; --i) {
-            var encoded = encodeURIComponent(safe[i]);
-            if (encoded !== safe.charAt(i)) {    // Ignore safe char if it wasn't escaped
-                toUnencode.push(encoded);
-            }
-        }
-
-        url = url.replace(new RegExp(toUnencode.join('|'), 'ig'), decodeURIComponent);
-        return url;
+    bytesToSize:function(bytes,precision) {
+        var sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        if (bytes == 0) return 'n/a';
+        var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        return ((i == 0)? (bytes / Math.pow(1024, i)) : (bytes / Math.pow(1024, i)).toFixed(precision)) + ' ' + sizes[i];
     },
     
     folderlist:function(padding,folder){
@@ -106,7 +88,7 @@ Function = {
                             'src="img/move.png"/><img class="delete" title='+
                             '"delete" id="'+value.id+'" src="img/delete.png"/>'+
                             '</div></div>');
-                        $("#name_"+value.id).text(' '+value.name+' ('+Function.tomb(value.size)+' MB)').html();
+                        $("#name_"+value.id).text(' '+value.name+' ('+Function.bytesToSize(value.size,2)+')').html();
                         $("#name_"+value.id).attr('name',value.name);
                     }
                 })
@@ -116,39 +98,39 @@ Function = {
 
     search : function(query){
         Putio.File.search(query,function(data){
-                var results=data.response.results;
-                $("#root").html('<input name="search_id" value="'+query+'" type="hidden"/>');
-                $.each(results,function(index, value){
-                    value.name=String(value.name);
-                    if(value.type=='folder'){
-                        $("#root").append('<div class="item"><div class='+
-                            '"folder" id="'+value.id+'"><a href=# ><img class='+
-                            '"file_icon" src="'+value.file_icon_url+'"/><span '+
-                            'id="name_'+value.id+'"></span></a></div><div class='+
-                            '"edit"><img class="rename" title="rename" id="'+
-                            value.id+'" src="img/rename.png"/><img class="move" '+
-                            'title="move" id="'+value.id+'" src="img/move.png"/>'+
-                            '<img class="delete" title="delete" id="'+value.id+
-                            '" src="img/delete.png"/></div></div>');
-                        $("#name_"+value.id).text(' '+value.name).html();
-                        $("#name_"+value.id).attr('name',value.name);
-                    }
-                    else{
-                        $("#root").append('<div class="item" ><div class="'+
-                            'files" download_url="'+value.download_url+'"><a href="#">'+
-                            '<img class="file_icon" src="'+value.file_icon_url+
-                            '"/><span id="name_'+value.id+'"></span></a></div>'+
-                            '<div class="edit"><img class="rename" title='+
-                            '"rename" id="'+value.id+'" src="img/rename.png"/>'+
-                            '<img class="move" title="move" id="'+value.id+'" '+
-                            'src="img/move.png"/><img class="delete" title='+
-                            '"delete" id="'+value.id+'" src="img/delete.png"/>'+
-                            '</div></div>');
-                        $("#name_"+value.id).text(' '+value.name+' ('+Function.tomb(value.size)+' MB)').html();
-                        $("#name_"+value.id).attr('name',value.name);
-                    }
-                })
-            });
+            var results=data.response.results;
+            $("#root").html('<input name="search_id" value="'+query+'" type="hidden"/>');
+            $.each(results,function(index, value){
+                value.name=String(value.name);
+                if(value.type=='folder'){
+                    $("#root").append('<div class="item"><div class='+
+                        '"folder" id="'+value.id+'"><a href=# ><img class='+
+                        '"file_icon" src="'+value.file_icon_url+'"/><span '+
+                        'id="name_'+value.id+'"></span></a></div><div class='+
+                        '"edit"><img class="rename" title="rename" id="'+
+                        value.id+'" src="img/rename.png"/><img class="move" '+
+                        'title="move" id="'+value.id+'" src="img/move.png"/>'+
+                        '<img class="delete" title="delete" id="'+value.id+
+                        '" src="img/delete.png"/></div></div>');
+                    $("#name_"+value.id).text(' '+value.name).html();
+                    $("#name_"+value.id).attr('name',value.name);
+                }
+                else{
+                    $("#root").append('<div class="item" ><div class="'+
+                        'files" download_url="'+value.download_url+'"><a href="#">'+
+                        '<img class="file_icon" src="'+value.file_icon_url+
+                        '"/><span id="name_'+value.id+'"></span></a></div>'+
+                        '<div class="edit"><img class="rename" title='+
+                        '"rename" id="'+value.id+'" src="img/rename.png"/>'+
+                        '<img class="move" title="move" id="'+value.id+'" '+
+                        'src="img/move.png"/><img class="delete" title='+
+                        '"delete" id="'+value.id+'" src="img/delete.png"/>'+
+                        '</div></div>');
+                    $("#name_"+value.id).text(' '+value.name+' ('+Function.tomb(value.size)+' MB)').html();
+                    $("#name_"+value.id).attr('name',value.name);
+                }
+            })
+        });
     },
 
     transfert_list : function(){
