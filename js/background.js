@@ -122,6 +122,10 @@ Background = {
     },
 
     start:function(){
+        clearTimeout(this.time_start);
+        this.time_start=setTimeout( function () {
+            Background.start();
+        }, 3600000)
         Putio.File.dirmap(function(data){
             if (data.error==false){
                 var results=data.response.results;
@@ -136,9 +140,6 @@ Background = {
                     }
                 });
                 Background.folderlist(results,parent_tab_id);
-                this.time_start=setTimeout( function () {
-                    Background.start();
-                }, 3600000)
             }
             else{
                 this.time_start=setTimeout( function () {
