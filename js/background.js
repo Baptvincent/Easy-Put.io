@@ -127,6 +127,7 @@ Background = {
             Background.start();
         }, 3600000)
         Putio.File.dirmap(function(data){
+            chrome.contextMenus.removeAll();
             if (data.error==false){
                 var results=data.response.results;
                 var contexts = ["selection","link"];
