@@ -1,10 +1,12 @@
 Background = {
     time_notif:null,
+    time_start:null,
 
     notification:function(){
         Putio.Transfer.list(function(data){
             var notif=data.response.total
-            notif+='';
+            if (notif)notif+='';
+            else notif=''
             if (notif!='0'){
                 chrome.browserAction.setBadgeText({
                     'text':notif
@@ -15,10 +17,10 @@ Background = {
                     'text':''
                 });
             }
-            this.time_notif=setTimeout( function () {
-                Background.notification();
-            }, 10000)
         })
+        this.time_notif=setTimeout( function () {
+            Background.notification();
+        }, 10000)
     },
 
     extract_url:function (url){
@@ -61,30 +63,30 @@ Background = {
             $.each(results.singleurl,function(index, value){
                 good_urls.push(value.url);
                 var notification = webkitNotifications.createNotification(
-                        'img/icon128.png',
-                        'Request Sent for',
-                        value.name
-                        );
-                    notification.show();
-                    setTimeout( function () {
-                        notification.cancel();
-                    }, 4000);
+                    'img/icon128.png',
+                    'Request Sent for',
+                    value.name
+                    );
+                notification.show();
+                setTimeout( function () {
+                    notification.cancel();
+                }, 4000);
             })
             $.each(results.torrent,function(index, value){
                 good_urls.push(value.url);
                 var notification = webkitNotifications.createNotification(
-                        'img/icon128.png',
-                        'Request Sent for',
-                        value.name
-                        );
-                    notification.show();
-                    setTimeout( function () {
-                        notification.cancel();
-                    }, 4000);
+                    'img/icon128.png',
+                    'Request Sent for',
+                    value.name
+                    );
+                notification.show();
+                setTimeout( function () {
+                    notification.cancel();
+                }, 4000);
             })
             Putio.Transfer.add(good_urls,folder_id,function(data){
              
-            })
+                })
         })
     },
 
@@ -117,5 +119,32 @@ Background = {
             Background.folderlist(value,parent_id);
         })
 
+    },
+
+    start:function(){
+        Putio.File.dirmap(function(data){
+            if (data.error==false){
+                var results=data.response.results;
+                var contexts = ["selection","link"];
+                var parent_tab_id=chrome.contextMenus.create({
+                    "title": "Send to Put.io",
+                    "contexts":contexts,
+                    "onclick": function(data) {
+                        if(data.linkUrl)var url=data.linkUrl
+                        else var url=data.selectionText
+                        Background.sendtoputio(url,'0');
+                    }
+                });
+                Background.folderlist(results,parent_tab_id);
+                this.time_start=setTimeout( function () {
+                    Background.start();
+                }, 3600000)
+            }
+            else{
+                this.time_start=setTimeout( function () {
+                    Background.start();
+                }, 10000)
+            }
+        });
     }
 }
