@@ -1,0 +1,8 @@
+{
+  "name": "Easy Put.io",
+  "fullName": "Easy Put.io",
+  "description": "Send links to download on Put.io",
+  "author": "Baptiste Vincent",
+  "license": "MPL 1.1/GPL 2.0/LGPL 2.1",
+  "version": "0.1"
+}

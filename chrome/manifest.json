@@ -1,0 +1,18 @@
+{
+  "name": "Easy Put.io",
+  "version": "1.7.2",
+  "description": "Send links to download on Put.io",
+  "browser_action": {
+    "default_icon": "img/icon16.png",
+    "popup": "start.html"
+  },
+  "icons": {
+    "16": "img/icon16.png",
+    "48": "img/icon48.png",
+    "128": "img/icon128.png"
+  },
+  "permissions": [
+    "tabs","http://*/","https://*/", "tabs", "contextMenus", "notifications"
+  ],
+   "background_page": "background.html"
+}
