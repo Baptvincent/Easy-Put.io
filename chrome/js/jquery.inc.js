@@ -9,9 +9,9 @@
 $(document).ready(function() {
 
     $("#header a").live("click", function(){
-        Function.clear_error();
+        Putio_Function.clear_error();
         var id = $(this).attr("id");
-        Function.go(id);
+        Putio_Function.go(id);
     });
 
     $(".item").live("mouseover mouseout", function(event) {
@@ -23,15 +23,15 @@ $(document).ready(function() {
     });
 
     $(".folder").live("click", function(){
-        Function.clear_error();
+        Putio_Function.clear_error();
         $("#root").html('');
         
         var id = $(this).attr("id");
-        Function.gotofolder(id);
+        Putio_Function.gotofolder(id);
     });
 
     $(".files").live("click", function(){
-        Function.clear_error();
+        Putio_Function.clear_error();
 
         var download_url = $(this).attr("download_url");
         chrome.tabs.getSelected(undefined,function(data){
@@ -69,17 +69,20 @@ $(document).ready(function() {
         $("#folder_id").html('<option value="0">/</option>')
         Putio.File.dirmap(function(data){
             results=data.response.results;
-            Function.folderlist('',results);
+            Putio_Function.folderlist('',results);
         })
         $("#valid_popup").html('<img id="valid" type="move" value="'+id+'" src="img/valid.png">')
     });
 
     $(".delete").live("click", function(){
-        var id=$(this).attr("id");
-        var name=$("#name_"+id).attr("name");
+        var ids=[];
+        $("input[name=delete]:checked").each(function() {
+            ids.push($(this).val());
+        });
+        var n = $("input[name=delete]:checked").length
         $('#popup').show();
-        $("#text_popup").html('Are you sure you want to delete file '+name+'?')
-        $("#input_popup").html('<img id="valid" type="delete" value="'+id+'" src="img/valid.png"><img id="close" src="img/delete.png">')
+        $("#text_popup").html('Are you sure you want to delete '+n+' file(s)?')
+        $("#input_popup").html('<img id="valid" type="delete" value="'+ids+'" src="img/valid.png"><img id="close" src="img/delete.png">')
         $("#valid_popup").html('')
     });
 
@@ -104,7 +107,7 @@ $(document).ready(function() {
                     if(data.error==true){
                         Putio._message(data.error_message,"error");
                     }
-                    Function.gotofolder(parent_id);
+                    Putio_Function.gotofolder(parent_id);
                 })
                 break;
             case 'rename':
@@ -113,18 +116,21 @@ $(document).ready(function() {
                     if(data.error==true){
                         Putio._message(data.error_message,"error");
                     }
-                    if (query)Function.search(query);
-                    else Function.gotofolder(parent_id);
+                    if (query)Putio_Function.search(query);
+                    else Putio_Function.gotofolder(parent_id);
                 })
                 break;
             case 'delete':
-                Putio.File.del(id,function(data){
-                    if(data.error==true){
-                        Putio._message(data.error_message,"error");
-                    }
-                    if (query)Function.search(query);
-                    else Function.gotofolder(parent_id);
+                var ids = id.split(',');
+                $.each(ids,function(index, value){
+                    Putio.File.del(value,function(data){
+                        if(data.error==true){
+                            Putio._message(data.error_message,"error");
+                        }
+                    })
                 })
+                if (query)Putio_Function.search(query);
+                else Putio_Function.gotofolder(parent_id);
                 break;
             case 'move':
                 var value=$('#folder_id').attr("value");
@@ -132,8 +138,8 @@ $(document).ready(function() {
                     if(data.error==true){
                         Putio._message(data.error_message,"error");
                     }
-                    if (query)Function.search(query);
-                    else Function.gotofolder(parent_id);
+                    if (query)Putio_Function.search(query);
+                    else Putio_Function.gotofolder(parent_id);
                 })
                 break;
             case 'cancel':
@@ -154,13 +160,13 @@ $(document).ready(function() {
     });
 
     $("#save").live("click", function(){
-        Function.clear_error();
+        Putio_Function.clear_error();
         var apikey=$('input[name=apikey]').attr('value');
         var apisecret=$('input[name=apisecret]').attr('value');
         if (apikey && apisecret){
             localStorage["putio_apikey"] = apikey;
             localStorage["putio_apisecret"] = apisecret;
-            Function.go('fetch');
+            Putio_Function.go('fetch');
         }
         else{
             Putio._message("Please enter valid API Key and Api Secret","error")
@@ -179,12 +185,12 @@ $(document).ready(function() {
     });
     $("#send_search").live("click",function(event){
         var query=$('#search_query').attr('value');
-        if (query=='')Function.gotofolder('0');
-        else Function.search(query);
+        if (query=='')Putio_Function.gotofolder('0');
+        else Putio_Function.search(query);
     });
 
     $("#send").live("click", function(){
-        Function.clear_error();
+        Putio_Function.clear_error();
         var url=$('textarea[name=url]').attr('value');
         var title=$('input[name=title]').attr('value');
         var lang=$('input[name=lang]').attr('value');
@@ -195,10 +201,11 @@ $(document).ready(function() {
         }
         else{
             if(url!=''){
-                var urls=Function.extract_url(url)
+                var urls=Putio_Function.extract_url(url)
                 Putio.Url.analyze(urls,function(data){
                     var folder_id=$('select[name=folder_id]').attr('value');
                     var results=data.response.results.items;
+                    var disk_avail = data.response.results.disk_avail;
                     var good_urls=[];
                     var good_name=[];
                     
@@ -207,14 +214,26 @@ $(document).ready(function() {
                     })
 
                     $.each(results.singleurl,function(index, value){
+                        if (parseInt(disk_avail) > parseInt(value.size)){
+                        disk_avail-=value.size;
                         good_urls.push(value.url);
                         good_name.push(value.name);
+                        }
+                        else{
+                            Putio._message('There is not enought disk space to do that.',"error");
+                        }
                     })
                     $.each(results.torrent,function(index, value){
+                        if (parseInt(disk_avail) > parseInt(value.size)){
+                        disk_avail-=value.size;
                         good_urls.push(value.url);
                         good_name.push(value.name);
+                        }
+                        else{
+                            Putio._message('There is not enought disk space to do that.',"error");
+                        }
                     })
-
+                    
                     $.each(good_name,function(index, value){
                         Putio._message(value,"good");
                     })
@@ -238,5 +257,5 @@ $(document).ready(function() {
 
     });
 
-    Function.go(localStorage["id"] || 'fetch');
+    Putio_Function.go(localStorage["id"] || 'fetch');
 });

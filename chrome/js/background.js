@@ -47,6 +47,7 @@ Background = {
     sendtoputio:function (url, folder_id){
         var urls=Background.extract_url(url)
         Putio.Url.analyze(urls,function(data){
+            var disk_avail = data.response.results.disk_avail;
             var results=data.response.results.items;
             var good_urls = [];
             $.each(results.error,function(index, value){
@@ -61,24 +62,44 @@ Background = {
                 }, 4000);
             })
             $.each(results.singleurl,function(index, value){
-                good_urls.push(value.url);
-                var notification = webkitNotifications.createNotification(
-                    'img/icon128.png',
-                    'Request Sent for',
-                    value.name
-                    );
+                if (parseInt(disk_avail) > parseInt(value.size)){
+                    disk_avail-=value.size;
+                    good_urls.push(value.url);
+                    var notification = webkitNotifications.createNotification(
+                        'img/icon128.png',
+                        'Request Sent for',
+                        value.name
+                        );
+                }
+                else{
+                    var notification = webkitNotifications.createNotification(
+                        'img/icon128.png',
+                        'There is not enought disk space to do that.',
+                        'You could delete something to make room.'
+                        );
+                }
                 notification.show();
                 setTimeout( function () {
                     notification.cancel();
                 }, 4000);
             })
             $.each(results.torrent,function(index, value){
-                good_urls.push(value.url);
-                var notification = webkitNotifications.createNotification(
-                    'img/icon128.png',
-                    'Request Sent for',
-                    value.name
-                    );
+                if (parseInt(disk_avail) > parseInt(value.size)){
+                    disk_avail-=value.size;
+                    good_urls.push(value.url);
+                    var notification = webkitNotifications.createNotification(
+                        'img/icon128.png',
+                        'Request Sent for',
+                        value.name
+                        );
+                }
+                else{
+                    var notification = webkitNotifications.createNotification(
+                        'img/icon128.png',
+                        'There is not enought disk space to do that.',
+                        'You could delete something to make room.'
+                        );
+                }
                 notification.show();
                 setTimeout( function () {
                     notification.cancel();

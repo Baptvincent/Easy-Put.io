@@ -203,6 +203,27 @@ Putio = {
 
             },
             error: function(data) {
+
+                function print_r(theObj){
+  if(theObj.constructor == Array ||
+     theObj.constructor == Object){
+    $(".content").append("<ul>")
+    for(var p in theObj){
+      if(theObj[p].constructor == Array||
+         theObj[p].constructor == Object){
+$(".content").append("<li>["+p+"] => "+typeof(theObj)+"</li>");
+        $(".content").append("<ul>")
+        print_r(theObj[p]);
+        $(".content").append("</ul>")
+      } else {
+$(".content").append("<li>["+p+"] => "+theObj[p]+"</li>");
+      }
+    }
+    $(".content").append("</ul>")
+  }
+}
+                print_r(data)
+
                 $('#spinner').hide();
                 Putio._message("An error ocurred on calling the method <b>" +
                     method + "</b> in path <b>" + page + "</b> with message: <b>"+

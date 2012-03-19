@@ -158,7 +158,8 @@ $(document).ready(function() {
         var apikey=$('input[name=apikey]').attr('value');
         var apisecret=$('input[name=apisecret]').attr('value');
         if (apikey && apisecret){
-            console.log(apikey)
+            localStorage["putio_apikey"] = apikey;
+            localStorage["putio_apisecret"] = apisecret;
             Function.go('fetch');
         }
         else{

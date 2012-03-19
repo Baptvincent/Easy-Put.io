@@ -227,5 +227,14 @@ body a {
 }
 
 #search_query{
-    width: 400px;
+    width: 380px;
+}
+
+.create{
+    margin-left :5px;
+    width: 12px;
+}
+
+.checkbox{
+    height: 16px;
 }

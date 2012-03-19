@@ -122,13 +122,6 @@ Background = {
     },
 
     start:function(){
-        var contextMenu = require("context-menu");
-        var myItem = contextMenu.Item({
-  label: "My Mozilla Item",
-  contentScript: 'self.on("context", function (node) {' +
-                 '  return /mozilla/.test(document.URL);' +
-                 '});'
-});
         clearTimeout(this.time_start);
         this.time_start=setTimeout( function () {
             Background.start();
@@ -157,4 +150,3 @@ Background = {
         });
     }
 }
-Background.start();

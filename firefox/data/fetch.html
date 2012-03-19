@@ -1,0 +1,61 @@
+<script>
+    Putio.File.dirmap(function(data){
+        if (data.user_name==null && data.id==null
+            && data.error_message=='Service unavailable temporarily.'){
+            Function.go('config');
+            Putio._message("Please enter valid API Key and Api Secret","error")
+            return false;
+        }
+        else{
+            var results=data.response.results;
+            Function.folderlist('',results);
+        }
+    });
+</script>
+
+<div class="field">
+    <div class ="fieldname" id="url">Urls : </div>
+    <div class ="input">
+        <textarea rows="8" name="url" class="inputtext"/>
+    </div>
+</div>
+<!--<div class="field">
+    <div class ="fieldname" id="title">Movies Title : </div>
+    <div class ="input">
+        <input type="text" name="title" class="inputtext"/>
+    </div>
+</div>-->
+<div class="field">
+    <div class ="fieldname" id="folder">Folder : </div>
+    <div class ="input">
+        <select id="folder_id" name="folder_id" class="inputtext">
+            <option value="0">/</option>
+        </select>
+    </div>
+</div>
+<!--<div class="field">
+    <div class ="fieldname" >Language : </div>
+    <div class ="input">
+        <input type="radio" name="lang" value="vo" checked/> VO
+        <input type="radio" name="lang" value="vf" /> VF
+    </div>
+</div>
+<div class="field">
+    <div class ="fieldname">Sources : </div>
+    <div class ="input">
+        <input type="radio" name="source" value="megaupload" checked/> Megaupload
+        <input type="radio" name="source" value="rapidshare" /> Rapidshare
+    </div>
+</div>-->
+<!--<div class="field">
+    <div class ="fieldname">Subtitle : </div>
+    <div class ="input">
+        <input type="radio" name="subtitle" value="en"/> EN
+        <input type="radio" name="subtitle" value="fr"/> FR
+    </div>
+</div>-->
+<div class="field">
+    <div class ="fieldname" id="folder">&nbsp;</div>
+    <div class ="input">
+        <input type="submit" id="send" value="Send to Put.io"></div>
+</div>

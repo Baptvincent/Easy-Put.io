@@ -1,0 +1,20 @@
+<script>
+    Putio.Message.list(function(data){
+        console.log(data)
+        var results=data.response.results;
+        $.each(results,function(index, value){
+            if(value.channel=='2'){
+                value.title='<b>'+value.title
+                value.title=value.title.replace("<span", "</b><span")
+            }
+            $("#messages_list").append('<div class="message">'+value.title+'</div>');
+            $("#messages_list a").removeAttr("href");
+            $("#messages_list a").removeAttr("class");
+            $("#messages_list a").removeAttr("rel");
+            $("#messages_list a").css('font-weight', 'bold');
+
+        })
+    });
+</script>
+<div id="messages_list">
+</div>
