@@ -168,58 +168,10 @@ $(document).ready(function() {
                     Putio_Function.goToFolder(parent_id);
                 })
             break;
-            case 'default_folder':
-                if($('#folder_id_all').val()!='loading'){
-                    localStorage["default_folder_id"]=$('#folder_id_all').val();
-                    localStorage["default_movies_folder_id"]=$('#folder_id_movies').val();
-                    localStorage["default_tvshows_folder_id"]=$('#folder_id_tvshows').val();
-                    localStorage["default_music_folder_id"]=$('#folder_id_music').val();
-                    localStorage["default_games_folder_id"]=$('#folder_id_games').val();
-                    localStorage["default_applications_folder_id"]=$('#folder_id_applications').val();
-                    _gaq.push(['_trackEvent', 'search tab', 'Default Folder All', $('#folder_id_all>option:selected').text()]);
-                    _gaq.push(['_trackEvent', 'search tab', 'Default Folder Movies', $('#folder_id_movies>option:selected').text()]);
-                    _gaq.push(['_trackEvent', 'search tab', 'Default Folder TV Shows', $('#folder_id_tvshows>option:selected').text()]);
-                    _gaq.push(['_trackEvent', 'search tab', 'Default Folder Music', $('#folder_id_music>option:selected').text()]);
-                    _gaq.push(['_trackEvent', 'search tab', 'Default Folder Games', $('#folder_id_games>option:selected').text()]);
-                    _gaq.push(['_trackEvent', 'search tab', 'Default Folder Applications', $('#folder_id_applications>option:selected').text()]);
-
-                    Putio_Function.updateDefaultFolder();
-                }
-            break;
-            case 'default_subtitle':
-                localStorage["default_subtitle_code"]=$('#subtitle_code').val();
-                _gaq.push(['_trackEvent', 'search tab', 'Change Default Subtitle', localStorage["default_subtitle_code"]]);
-                $("#select_default_language").text(VAR_LANGUAGES[localStorage["default_subtitle_code"]]);
-            break;
-            case 'default_url':
-                if ($('#pb_url').val())
-                    localStorage["pb_url"]=$('#pb_url').val();
-                else
-                    localStorage["pb_url"]="http://thepiratebay.sx";
-
-                if ($('#kat_url').val())
-                    localStorage["kat_url"]=$('#kat_url').val();
-                else
-                    localStorage["kat_url"]="http://kickass.to";
-
-                if ($('#old_api').is(':checked')){
-                    localStorage["old_api"]="true";
-                    _gaq.push(['_trackEvent', 'search tab', 'click', 'Use old Api']);
-                }
-                else{
-                    localStorage["old_api"]="false";
-                    _gaq.push(['_trackEvent', 'search tab', 'click', 'Use new Api']);
-                }
-                _gaq.push(['_trackEvent', 'search tab', 'pb url', localStorage["pb_url"]]);
-                _gaq.push(['_trackEvent', 'search tab', 'kat url', localStorage["kat_url"]]);
-                $('#defaultUrlModal').modal('hide');
-            break;
         }
         $('#myAlertModal').modal('hide');
         $('#myNameInputModal').modal('hide');
         $('#myNameFolderSelectModal').modal('hide');
-        $('#defaultSubtitleSelectModal').modal('hide');
-        $('#defaultFolderModal').modal('hide');
     });
 
     $(document.body).on('click', '.rename' ,function(e){
@@ -295,117 +247,11 @@ $(document).ready(function() {
         }
     });
 
-    $(document.body).on('click', '#submit_search' ,function(e){
-        category=$('#search_category').val();
-        filter=$('input:radio[name=search_filter]:checked').val();
-        if(category=='torrent_link'){
-            title=$('#send_link').val();
-            title=title.replace(" magnet:?", "\nmagnet:?");
-            title=title.replace(" http", "\nhttp");
-        }
-        else{
-            title=$('#search_title').val();
-        }
-
-        if(title){
-            _gaq.push(['_trackEvent', 'search tab', category, title]);
-            switch (category) {
-                case 'kickasstorrents':
-                    $("#search_result").html('<div id="kat_result"></div>');
-                    Kickasstorrents.Files.search(title,filter,function(data){
-                        Putio_Function.displayKatResult(data);
-                    })
-                break;
-                case 'piratebay':
-                if (localStorage["old_api"]=="true"){
-                    _gaq.push(['_trackEvent', 'search tab', 'old_pb_api','true']);
-                    $("#search_result").html('<div id="old_pb_result"></div>');
-                    OldPiratebay.Files.search(title,filter,function(data){
-                        Putio_Function.displayPbResult(data,true);
-                    })
-                }
-                else
-                    _gaq.push(['_trackEvent', 'search tab', 'old_pb_api','false']);
-                    $("#search_result").html('<div id="pb_result"></div>');
-                    Piratebay.Files.search(title,filter,function(data){
-                        Putio_Function.displayPbResult(data,false);
-                    })
-                break;
-                case 'opensubtitle':
-                    $("#search_result").html('<div id="os_result"></div>');
-                    Opensubtitles.account.login(function(data){
-                        Opensubtitles.search.subtitle(data.token,title,function(data){
-                            Putio_Function.displaySubtitleResult(data);
-                        })
-                    })
-                break;
-                case 'torrent_link':
-                    background=chrome.extension.getBackgroundPage()
-                    background.Background.sendtoputio(title,localStorage["default_folder_id"],'search tab', 'Add new files to Put.io')
-                break;
-            }
-        }
-    });
-
-
-    $(document.body).on('keypress', '#search_title' ,function(event){
-        if(event.keyCode == 13){
-            $("#submit_search").click();
-        }
-    });
-
     $(document.body).on('keypress', '#myNameInputModal input' ,function(event){
         if(event.keyCode == 13){
             $("#myNameInputModal .yes").click();
         }
     });
-
-    $(document.body).on('click', '.download_subtitle' ,function(e){
-        download_url=$(this).attr('url');
-        _gaq.push(['_trackEvent', 'search tab', 'click','Download Subtitle']);
-        chrome.tabs.getSelected(undefined,function(data){
-            chrome.tabs.update(data.id, {
-                url:download_url
-            });
-        });
-    });
-
-    $(document.body).on('click', '.search_subtile' ,function(e){
-        localStorage["searchCategory"]="opensubtitle";
-        hash=$(this).attr('hash');
-        size=$(this).attr('size');
-        id=$(this).attr("value");
-        myFile=$('#file_list td[value='+id+']').text();
-        _gaq.push(['_trackEvent', 'files tab', 'click','Search Subtitle']);
-        Putio_Function.go('search');
-        $('#search_title').val(myFile)
-        $("#search_result").html('<div id="os_result"></div>');
-        Opensubtitles.account.login(function(data){
-            Opensubtitles.search.hash(data.token,hash,size,function(result){
-                if(!result.data){
-                    $("#submit_search").click();
-                }
-                else{
-                    Putio_Function.displaySubtitleResult(result);
-                }
-            })
-        })
-        
-    });
-
-    $(document.body).on('mouseleave', '#file_list th:nth-child(3), #file_list td:nth-child(3), #result_list td:nth-child(3), #subtitle_result_list td:nth-child(2)' ,function(e){
-        $(this).stop();
-        $(this).stop();
-        $(this).animate({ scrollLeft: 0 });
-    });
-
-    $(document.body).on('mouseenter', '#file_list th:nth-child(3), #file_list td:nth-child(3), #result_list td:nth-child(3), #subtitle_result_list td:nth-child(2)' ,function(e){
-        $(this).stop();
-        scrollWidth=$(this)[0].scrollWidth
-        $(this).delay(1000).animate({ scrollLeft: scrollWidth }, 5000);
-    });
-
-    //$("html, body").animate({ scrollTop: $(document).height() }, "slow");
 
     $(document.body).on('click', '.send_to_putio' ,function(e){
         from=$(this).attr('from');
@@ -441,173 +287,21 @@ $(document).ready(function() {
         background.Background.sendtoputio(magnet,localStorage[folder], 'search tab', from+' Send to Put.io');
     });
 
-    $(document.body).on('click', '#last_movies_button' ,function(e){
+    /*$(document.body).on('click', '#last_movies_button' ,function(e){
         $("#search_result").html('<div id="yify_result"></div>');
         var page = $(this).attr("set");
         _gaq.push(['_trackEvent', 'search tab','click', "Latest Movie"]);
         Yify.Files.list(page,function(data){
             Putio_Function.displayLastMovies(data);
         })
-    });
+    });*/
     
-    $(document.body).on('click', '.page-link' ,function(e){
-        var page = $(this).attr("href");
-        var page=page.replace("#page-","");
-        Yify.Files.list(page,function(data){
-            Putio_Function.displayLastMovies(data);
-            $('body').scrollTop(0);
-        })
-    });
-
-    $(document.body).on('click', '.show_on_imdb' ,function(e){
-        var file_url = $(this).attr("url");
-        _gaq.push(['_trackEvent', 'search tab', 'click', 'Show On Imdb']);
-        chrome.tabs.create({
-                url:file_url
-            });
-    });
-
-    $(document.body).on('click', '#go_to_yify' ,function(e){
-        url = 'http://yify-torrents.com/'
-        _gaq.push(['_trackEvent', 'search tab', 'click', 'Go To YIFY']);
-        chrome.tabs.create({
-                url:url
-            });
-    });
-
-    $(document.body).on('mouseenter', '#last_movies_list .first' ,function(e){
-        $(this).closest('tr').children('td.first').css("background-color", "#0088cc");
-        $(this).closest('tr').children('td.first').css("color", "#FFFFFF");
-    });
-
-    $(document.body).on('mouseleave', '#last_movies_list .first' ,function(e){
-        $(this).closest('tr').children('td.first').css("background-color", "");
-        $(this).closest('tr').children('td.first').css("color", "");
-    });
-
-    $(document.body).on('mouseenter', '#last_movies_list .second' ,function(e){
-        $(this).closest('tr').children('td.second').css("background-color", "#0088cc");
-        $(this).closest('tr').children('td.second').css("color", "#FFFFFF");
-    });
-
-    $(document.body).on('mouseleave', '#last_movies_list .second' ,function(e){
-        $(this).closest('tr').children('td.second').css("background-color", "");
-        $(this).closest('tr').children('td.second').css("color", "");
-    });
 
     $('#myNameInputModal').on('shown', function () {
         $("#myNameInputModal input").focus()
     })
 
-    $(document.body).on('click', '.thumbnail_yify' ,function(e){
-        _gaq.push(['_trackEvent', 'search tab', 'click', 'YIFY Thumbnail']);
-        /*var imdb_id = $(this).attr("imdb_id");
-        $.get('http://mymovieapi.com/?id='+imdb_id+'&type=json&plot=none&episode=0&lang=en-US&aka=simple&release=simple&business=0&tech=0', function(data) {
-          data = JSON.parse(data);
-          src = data.poster.replace(/\._V1.*\./, '._V1._SX600_SY600_.');
-            $('#thumbnail_modal').html('<img data-dismiss="modal" src="'+src+'"/>');
-            $('#thumbnail_modal').modal('show');
-        });*/
-        var src = $(this).attr("src");
-        src=src.replace("_med.","_large.");
-        $('#thumbnail_modal').html('<img data-dismiss="modal" src="'+src+'"/>');
-        $('#thumbnail_modal').modal('show');
-    });
-
-    $(document.body).on('click', '#select_default_folder' ,function(e){
-        $("body").css('min-height', '340px');
-        $(".default_folder_list").prop('disabled', true);
-        $(".default_folder_list").html('<option value="loading">Loading...</option>')
-        $(".default_folder_list").append('<option value="0">/</option>')
-        Putio_Function.count='0';
-        Putio_Function.folderList('','0','.default_folder_list',function(data){
-            $(".default_folder_list option[value='loading']").remove();
-            $('#folder_id_all option[value="'+localStorage["default_folder_id"]+'"]').prop("selected",true);
-            $('#folder_id_movies option[value="'+localStorage["default_movies_folder_id"]+'"]').prop("selected",true);
-            $('#folder_id_tvshows option[value="'+localStorage["default_tvshows_folder_id"]+'"]').prop("selected",true);
-            $('#folder_id_music option[value="'+localStorage["default_music_folder_id"]+'"]').prop("selected",true);
-            $('#folder_id_games option[value="'+localStorage["default_games_folder_id"]+'"]').prop("selected",true);
-            $('#folder_id_applications option[value="'+localStorage["default_applications_folder_id"]+'"]').prop("selected",true);
-            $('.default_folder_list').prop('disabled', false);
-        });
-        $('#defaultFolderModal').modal('show');
-    });
-
-    $(document.body).on('click', '#select_default_language' ,function(e){
-        $('#subtitle_code').html('');
-         $.each(VAR_LANGUAGES,function(index, value){
-            selected=(localStorage["default_subtitle_code"]==index) ? "selected" : "";
-            $('#subtitle_code').append('<option value="'+index+'" '+selected+'>'+value+'</option>')
-         })
-        $('#defaultSubtitleSelectModal').modal('show');
-    });
-
-    $(document.body).on('click', '#select_default_url' ,function(e){
-        $('#pb_url').val(localStorage["pb_url"]);
-        $('#kat_url').val(localStorage["kat_url"]);
-        if(localStorage["old_api"]=="true"){
-            $('#old_api').prop('checked', true);
-            $("#pb_url").prop('disabled', true);
-        }
-        $('#defaultUrlModal').modal('show');
-    });
-
-    $(document.body).on('change', '#old_api' ,function(e){
-        if($('#old_api').is(':checked'))
-            $("#pb_url").prop('disabled', true);
-        else
-            $("#pb_url").prop('disabled', false);
-    })
-
-    $(document.body).on('change', '#search_category' ,function(e){
-        search_category=$(this).val();
-        if(search_category!='opensubtitle'){
-            Putio_Function.updateDefaultFolder()
-        }
-
-        if(search_category=='opensubtitle'){
-            placeholder="Search on OpenSubtitles";
-            $(".search_filter").prop('disabled', true);
-            $("#submit_search").text('Search');
-            $('#send_link').hide();
-            $('#search_title').prop('disabled', false);
-        }
-        else if(search_category=='torrent_link'){
-            placeholder="";
-            $(".search_filter").prop('disabled', true);
-            $("#submit_search").text('Fetch');
-            $('#search_title').prop('disabled', true);
-            $('#send_link').show();
-        }
-        else if(search_category=='piratebay'){
-            placeholder="Search on The Pirate Bay";
-            $(".search_filter").prop('disabled', false);
-            $("#submit_search").text('Search')
-            $('#send_link').hide();
-            $('#search_title').prop('disabled', false);
-        }
-        else if(search_category=='kickasstorrents'){
-            placeholder="Search on KickassTorrents";
-            $(".search_filter").prop('disabled', false);
-            $("#submit_search").text('Search')
-            $('#send_link').hide();
-            $('#search_title').prop('disabled', false);
-        }
-
-        $('#search_title').attr('placeholder',placeholder);
-        _gaq.push(['_trackEvent', 'search tab', 'category', search_category]);
-        localStorage["searchCategory"]=search_category;
-        $("#send_link").focus()
-        $("#search_title").focus()
-    })
-
-    $(document.body).on('change', '[name=search_filter]' ,function(e){
-        search_filter=$(this).val();
-        _gaq.push(['_trackEvent', 'search tab', 'filter', search_filter]);
-        localStorage["searchFilter"]=search_filter;
-
-        Putio_Function.updateDefaultFolder();
-    })
+    if(localStorage["tabName"]=='search')localStorage["tabName"]='files';
 
     Putio_Function.init(localStorage["tabName"] || 'files');
 });

@@ -70,6 +70,17 @@ Putio_Function = {
                 $("#content").html('<div id="tab_transfers"></div>');
                 this.transfersList();
                 break;
+            case 'search':
+                $("#content").html('<div id="tab_search"></div>');
+                if(!localStorage["kat_url"])
+                    localStorage["kat_url"]="http://kickass.to"
+                if(!localStorage["pb_url"])
+                    localStorage["pb_url"]="http://thepiratebay.sx"
+                this.search(function(data){
+                    $("#send_link").focus()
+                    $("#search_title").focus()
+                });
+                break;
             default:
                 break;
         }
@@ -353,6 +364,9 @@ Putio_Function = {
                     content+='</td>';
                     content+='<td>';
                     content+='<a class="rename" data-toggle="tooltip" data-placement="left" title="" data-original-title="Rename" value="'+value.id+'" href="#"><i class="icon-edit"></i></a>';
+                    if(value.opensubtitles_hash){
+                       content+='<a class="search_subtile" data-toggle="tooltip" data-placement="left" title="" data-original-title="Subtitles" value="'+value.id+'" hash="'+value.opensubtitles_hash+'" size="'+value.size+'" href="#"><i class="icon-search"></i></a>'; 
+                    }
                     content+='</td>';
                     content+='</tr>';
                 });
@@ -365,6 +379,86 @@ Putio_Function = {
             }
             
         });
+    },
+
+    search : function(callback){
+
+        if(!localStorage["searchCategory"]){
+            localStorage["searchCategory"]='kickasstorrents';
+        }
+
+        if(!localStorage["searchFilter"]){
+            localStorage["searchFilter"]='all';
+        }
+
+        if(localStorage["searchCategory"]=='opensubtitle'){
+            placeholder="Search on OpenSubtitles";
+            buttonText="Search"
+            textareaStyle="none";
+            inputStyle="inline-block";
+        }
+        else if(localStorage["searchCategory"]=='piratebay'){
+            placeholder="Search on The Pirate Bay";
+            buttonText="Search"
+            textareaStyle="none";
+            inputStyle="inline-block";
+        }
+        else if(localStorage["searchCategory"]=='kickasstorrents'){
+            placeholder="Search on KickassTorrents";
+            buttonText="Search"
+            textareaStyle="none";
+            inputStyle="inline-block";
+        }
+        else if(localStorage["searchCategory"]=='torrent_link'){
+            placeholder="";
+            buttonText="Fetch"
+            textareaStyle="inline-block";
+            inputStyle="disabled";
+        }
+        else{
+            localStorage["searchCategory"]='kickasstorrents';
+            placeholder="Search on KickassTorrents";
+            buttonText="Search";
+            textareaStyle="none";
+            inputStyle="inline-block";
+        }
+
+        var content='';
+
+        content+='<div class="form-inline" id="search_form">';
+
+        content+='<select id="search_category" class="select">';
+        content+='<option value="kickasstorrents" >KAT</option>';
+        content+='<option value="piratebay" >TPB</option>';
+        content+='<option value="opensubtitle" >OS</option>';
+        content+='<option value="torrent_link" >Links</option>';
+        content+='</select>';
+
+        content+='<input type="text" id="search_title" placeholder="'+placeholder+'" '+inputStyle+'>';
+        content+='<button class="btn btn-primary" id="submit_search">'+buttonText+'</button>';
+        content+='<button class="btn" id="last_movies_button" set="1">Latest Movies</button>';
+        content+='<br><textarea rows="3" cols="50" id="send_link" placeholder="Add new files to Put.io" style="display:'+textareaStyle+';"></textarea>';
+        content+='<div id="filter"><label class="radio"><input type="radio" name="search_filter" class="search_filter" value="all" checked>All</label>';
+        content+='<label class="radio"><input type="radio" name="search_filter" class="search_filter" value="movies">Movies</label>';
+        content+='<label class="radio"><input type="radio" name="search_filter" class="search_filter" value="tvshows">TV Shows</label>';
+        content+='<label class="radio"><input type="radio" name="search_filter" class="search_filter" value="music">Music</label>';
+        content+='<label class="radio"><input type="radio" name="search_filter" class="search_filter" value="games">Games</label>';
+        content+='<label class="radio"><input type="radio" name="search_filter" class="search_filter" value="applications">Applications</label>';
+        content+='</div><div id="options"><strong><a data-toggle="tooltip" data-placement="right" title="" data-original-title="Change" href="#" id="select_default_url">Options</a></strong></div>';
+        content+='</div>';
+        content+='<div id="search_result">';
+        content+='</div>';
+
+        $("#tab_search").html(content);
+        $("#search_category").val(localStorage["searchCategory"])
+        $("input:radio[value="+localStorage["searchFilter"]+"]").prop('checked', true);
+        if (!localStorage["default_subtitle_code"] || localStorage["default_subtitle_code"]=="null")localStorage["default_subtitle_code"]='eng';
+        $("#options").append(' | Subtitle In <strong><a href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Change" id="select_default_language">'+VAR_LANGUAGES[localStorage["default_subtitle_code"]]+'</a></strong>');
+        if(localStorage["searchCategory"]=='opensubtitle' || localStorage["searchCategory"]=='torrent_link'){
+            $(".search_filter").prop('disabled', true);
+        }
+        Putio_Function.getDefaultFolderData();
+        callback(true)
     },
 
     getDefaultFolderData : function(callback){
@@ -382,6 +476,40 @@ Putio_Function = {
                 }
             $('[data-toggle="tooltip"]').tooltip({'delay': { show: 1500, hide: 200 }});
         })
+    },
+
+    getDefaultFolderToDisplay : function(){
+        if($("#search_category").val()=="kickasstorrents" || $("#search_category").val()=="piratebay"){
+            switch($('input:radio[name=search_filter]:checked').val()){
+                case "all":
+                    folder="default_folder_id";
+                break;
+                case "movies":
+                    folder="default_movies_folder_id";
+                break;
+                case "tvshows":
+                    folder="default_tvshows_folder_id";
+                break;
+                case "music":
+                    folder="default_music_folder_id";
+                break;
+                case "games":
+                    folder="default_games_folder_id";
+                break;
+                case "applications":
+                    folder="default_applications_folder_id";
+                break;
+                default:
+            
+                break
+            }
+        }
+
+        else{
+            folder="default_folder_id";
+        }
+
+        return folder;
     },
 
     updateDefaultFolder : function(){
@@ -402,6 +530,254 @@ Putio_Function = {
                 }
             })
         }
+    },
+
+    displaySubtitleResult : function(result){
+        var content='';
+        if (result.error){
+            content+='<div class="alert alert-error"><h4>Sorry!</h4>';
+            content+=result.status+' '+result.statusText+'<div>';
+        }
+        else if(result.data){
+            content+='<table class="table-condensed table-striped" id="subtitle_result_list">';
+            content+='<thead>';
+            content+='<tr class="text-left">';
+            content+='<th width="14%">';
+            content+='Language';
+            content+='</th>';
+            content+='<th width="86%">';
+            content+='Name';
+            content+='</th>';
+            content+='</thead>';
+            content+='<tbody>';
+
+             $.each(result.data,function(index, value){
+                content+='<tr class="download_subtitle" url="'+value.ZipDownloadLink+'">';
+                content+='<td>';
+                content+=value.LanguageName;
+                content+='</td>';
+                content+='<td>';
+                content+='<strong>'+value.SubFileName+'</strong>';
+                content+='</td>';
+            })
+
+        }
+        else{
+            content+='<div class="alert alert-block"><h4>Nothing found!</h4>';
+            content+='Your search "'+Opensubtitles.query+'" did not match any documents.<div>';
+        }
+        $("#os_result").html(content);
+    },
+
+    displayPbResult : function(result,old){
+        var content='';
+
+        if (result.error){
+            content+='<div class="alert alert-error"><h4>Sorry!</h4>';
+            content+=result.status+' '+result.statusText+'<div>';
+        }
+        else if(result.length>0){
+            content+='<table class="table-condensed table-striped" id="result_list">';
+            content+='<thead>';
+            content+='<tr class="text-left">';
+            content+='<th style="width: 11%">';
+            content+='Category';
+            content+='</th>';
+            content+='<th style="width: 12%">';
+            content+='Size';
+            content+='</th>';
+            content+='<th style="width: 57%">';
+            content+='Name';
+            content+='</th>';
+            content+='<th style="width: 11%">';
+            content+='Age';
+            content+='</th>';
+            content+='<th style="width: 9%">';
+            content+='Seeders';
+            content+='</th>';
+            content+='</thead>';
+            content+='<tbody>';
+
+             $.each(result,function(index, value){
+                if(value.category.indexOf("HD")!=-1)
+                    value.category='HD'
+
+                value.size=value.size.replace("i","");
+
+                content+='<tr class="send_to_putio" from="PB" magnet="'+value.magnet+'">';
+                content+='<td>';
+                content+=value.category;
+                content+='</td>';
+                content+='<td>';
+                content+=value.size;
+                content+='</td>';
+                content+='<td>';
+                content+='<strong>'+value.name+'</strong>';
+                content+='</td>';
+                content+='<td>';
+                content+=Putio_Function.pirateBayTimeToDuration(value.uploaded);
+                content+='</td>';
+                content+='<td>';
+                content+=value.seeders;
+                content+='</td>';
+                content+='</tr>';
+             })
+
+
+            content+='</tbody>';
+            content+='</table>';
+        }
+        else{
+            content+='<div class="alert alert-block"><h4>Nothing found!</h4>';
+            content+='Your search "'+Piratebay.query+'" did not match any documents.<div>';
+        }
+        if(old==true)
+            $("#old_pb_result").html(content);
+        else
+            $("#pb_result").html(content);
+    },
+
+    displayKatResult : function(result){
+        var content='';
+
+        if (result.error){
+            content+='<div class="alert alert-error"><h4>Sorry!</h4>';
+            content+=result.status+' '+result.statusText+'<div>';
+        }
+        else if(result.channel && result.channel.item.length>0){
+            content+='<table class="table-condensed table-striped" id="result_list">';
+            content+='<thead>';
+            content+='<tr class="text-left">';
+            content+='<th style="width: 11%">';
+            content+='Category';
+            content+='</th>';
+            content+='<th style="width: 12%">';
+            content+='Size';
+            content+='</th>';
+            content+='<th style="width: 57%">';
+            content+='Name';
+            content+='</th>';
+            content+='<th style="width: 11%">';
+            content+='Age';
+            content+='</th>';
+            content+='<th style="width: 9%">';
+            content+='Seeders';
+            content+='</th>';
+            content+='</thead>';
+            content+='<tbody>';
+
+             $.each(result.channel.item,function(index, value){
+                var today = new Date();
+                var pubDate= new Date(value.pubDate)
+                var secondDifference = today - new Date(value.pubDate);
+
+                pubDate = Putio_Function.millisecondsToString(secondDifference)
+
+                category=value.category.split(">")
+
+                content+='<tr class="send_to_putio" from="KAT" magnet="'+value.magnetURI+'">';
+                content+='<td>';
+                content+=category[0];
+                content+='</td>';
+                content+='<td>';
+                content+=Putio_Function.bytesToSize(value.contentLength,2);
+                content+='</td>';
+                content+='<td>';
+                content+='<strong>'+value.title+'</strong>';
+                content+='</td>';
+                content+='<td>';
+                content+=pubDate;
+                content+='</td>';
+                content+='<td>';
+                content+=value.seeds;
+                content+='</td>';
+                content+='</tr>';
+             })
+
+
+            content+='</tbody>';
+            content+='</table>';
+        }
+        else{
+            content+='<div class="alert alert-block"><h4>Nothing found!</h4>';
+            content+='Your search "'+Kickasstorrents.query+'" did not match any documents.<div>';
+        }
+        $("#kat_result").html(content);
+    },
+
+    displayLastMovies : function(result){
+
+        var content='';
+        if (result.error){
+            content+='<div class="alert alert-error"><h4>Sorry!</h4>';
+            content+=result.status+' '+result.statusText+'<div>';
+        }
+        else if(result.MovieList.length>0){
+
+            Yify.page=parseInt(Yify.page)
+
+            content+='<table class="table-condensed table-striped" id="last_movies_list">';
+            
+            content+='<thead>';
+            content+='<tr>';
+            content+='<th colspan="4" class="text-left">';
+            content+='<div id="powered_by" >Powered by <span id="go_to_yify">YIFY Torrents</span></div>';
+            content+='<div class="pagination pagination-mini">';
+            
+            content+='</div>';
+            content+='</th>';
+            content+='</thead>';
+
+            content+='<tfoot>';
+            content+='<tr>';
+            content+='<th colspan="4" class="text-right">';
+            content+='<div class="pagination pagination-mini">';
+            content+='</div>';
+            content+='</th>';
+            content+='</tfoot>';
+
+            content+='<tbody>';
+             $.each(result.MovieList,function(index, value){
+                info='<td class="%myclass%" style="width: 17%">';
+                info+='<img src="'+value.CoverImage+'" imdb_id="'+value.ImdbCode+'" class="thumbnail_yify"/>';
+                info+='</td>';
+                info+='<td class="%myclass%" style="width: 33%">';
+                info+='<h5><strong>'+value.MovieTitle+'</strong></h5>';
+                info+='<strong>Size : </strong>'+value.Size+'</br>';
+                info+='<strong>Quality : </strong>'+value.Quality+'</br>';
+                info+='<strong>Genre : </strong>'+value.Genre+'</br>';
+                info+='<strong>IMDB Rating : </strong>'+value.MovieRating+'</br>';
+                info+='<strong>Peers: </strong>'+value.TorrentPeers+' <strong>Seeds: </strong>'+value.TorrentSeeds+'</br>';
+                info+='<button class="btn btn-mini show_on_imdb" type="button" url="'+value.ImdbLink+'">View On IMDB</button>';
+                info+='<button class="btn btn-mini send_to_putio" from="YIFY" type="button" magnet="'+value.TorrentUrl+'">Send to Put.io</button>';
+                info+='</td>';
+
+                if(index%2==0){
+                    content+='<tr>';
+                    info=info.replace(/%myclass%/g,"first");
+                    content+=info;
+                }
+                else if(index%2==1){
+                    info=info.replace(/%myclass%/g,"second");
+                    content+=info;
+                    content+='</tr>';
+                }
+
+             })
+            content+='</tbody>';
+            content+='</table>';
+        }
+        $("#yify_result").html(content);
+        $(".pagination").pagination({
+            items: result.MovieCount,
+            itemsOnPage: 20,
+            displayedPages:5,
+            edges:1,
+            currentPage : Yify.page,
+            prevText :"&laquo;",
+            nextText :"&raquo;",
+            selectOnClick:false
+        });
     },
 
     transfersList : function(){
@@ -496,5 +872,26 @@ Putio_Function = {
             _gaq.push(['_trackEvent', 'version', localStorage["version"]]);
             localStorage["date_check_version"]=today;
         }
+    },
+
+    download : function(download_url){
+        Putio.Account.settings(function(data){
+            if (data.settings.routing != localStorage['default_routing']){
+                Putio.Account.change_route(localStorage['default_routing'],function(data){
+                    chrome.tabs.getSelected(undefined,function(data){
+                        chrome.tabs.update(data.id, {
+                            url:download_url
+                        });
+                    });
+                })
+            }
+            else{
+                chrome.tabs.getSelected(undefined,function(data){
+                    chrome.tabs.update(data.id, {
+                        url:download_url
+                    });
+                });
+            }
+        })
     }
 }

@@ -39,7 +39,7 @@ Kickasstorrents = {
                     "rss": "1"
                 };
 
-            Kickasstorrents._request('usearch',search,params,'GET',function(data){
+            Kickasstorrents._request('usearch',encodeURIComponent(search),params,'GET',function(data){
                 output(data);
             });
         }

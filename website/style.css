@@ -1,0 +1,338 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 600px;
+    min-height: 220px;
+}
+
+.nav{
+    margin-bottom: 0px;
+    background-color: #FFFFFF;
+}
+
+#content {
+  padding-top: 35px;
+}
+
+.caption: {
+    text-align: left;
+}
+
+#file_list, #subtitle_result_list{
+    width: 100%;
+    table-layout: fixed;
+}
+
+#file_list th, #file_list td { 
+    overflow: hidden; 
+}
+
+#file_list th [title=Home]
+{
+    padding-right: 5px;
+}
+
+#file_list tbody td{
+cursor:pointer;
+}
+
+#file_list tbody tr:hover td{
+  background-color: #0088cc;
+  color: #FFFFFF;
+}
+
+#file_list td:nth-child(3),
+#file_list th:nth-child(3),
+#result_list td:nth-child(3),
+#subtitle_result_list td:nth-child(2)
+{
+    text-overflow:ellipsis;
+    overflow:scroll;
+    white-space:nowrap;
+}
+
+#file_list td:nth-child(3):hover,
+#file_list th:nth-child(3):hover,
+#result_list td:nth-child(3):hover,
+#subtitle_result_list td:nth-child(2):hover
+{
+    text-overflow:clip;
+}
+/*#file_list th:nth-child(3){
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+}*/
+
+#file_list td:nth-child(3)::-webkit-scrollbar,
+#file_list th:nth-child(3)::-webkit-scrollbar,
+#result_list td:nth-child(3)::-webkit-scrollbar,
+#subtitle_result_list td:nth-child(2)::-webkit-scrollbar { 
+    display: none; 
+}
+
+.thumbnail_putio{
+    max-width: 20px;
+}
+
+#spinner{
+    width: 22px;
+    padding-top: 8px;
+    padding-right: 12px;
+    padding-left: 12px;
+    display: none;
+}
+
+#logo img{
+    width: 64px;
+    padding-top: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.alert{
+    margin: 20px;
+}
+
+#transfers_list{
+    width: 100%;
+}
+
+.status_message{
+    position: absolute;
+    font-size: 10px;
+    line-height: 12px;
+    padding-top: 18px;
+    margin-left: 5px;
+}
+
+.transfer_name{
+    position: absolute;
+    margin-left: 5px;
+    width: 580px;
+
+}
+
+.transfer_progress{
+    height: 32px;
+    margin-bottom:0px;
+}
+
+.edit_transfer{
+    float: right;
+}
+
+#clean_alert{
+    margin: 0;
+}
+
+#myNameInputModal input{
+    width: 100%;
+}
+
+#account_info{
+width: 39%;
+float: right;
+padding-right: 5px;
+}
+
+#disk_used{
+    position: absolute;
+    margin-left: 5px;
+}
+
+.storage_available{
+    margin-top: 9px;
+    margin-bottom: 0px;
+}
+
+#subtitle_result_list{
+    width: 100%;
+    font-size: 11px;
+}
+
+#subtitle_result_list tbody td{
+cursor:pointer;
+}
+
+#subtitle_result_list tbody tr:hover td{
+  background-color: #0088cc;
+  color: #FFFFFF;
+}
+
+#result_list{
+    width: 100%;
+    font-size: 11px;
+    table-layout: fixed; 
+}
+
+#result_list tbody td{
+cursor:pointer;
+}
+
+#result_list tbody tr:hover td{
+  background-color: #0088cc;
+  color: #FFFFFF;
+}
+
+#result_list th, #result_list td { 
+    overflow: hidden; 
+}
+
+#last_movies_list{
+    width: 100%;
+    font-size: 11px;
+}
+
+#last_movies_list th, #last_movies_list td { 
+    overflow: hidden; 
+}
+
+.show_on_imdb img{
+    width: 100px;
+}
+
+#search_form{
+    margin: 5px;
+    white-space: nowrap;
+}
+
+#send_link {
+    margin-top: 5px;
+    white-space: nowrap;
+    width: 576px;
+}
+
+#folder_id{
+    width: auto;
+    max-width: 100%;
+}
+
+#logo img:hover{
+cursor:pointer;
+}
+
+#search_result .pagination{
+    margin: 0px;
+    float: right;
+}
+
+#powered_by{
+    float: left;
+}
+
+#last_movies_list button{
+    margin-right: 5px;
+}
+
+#last_movies_list h5{
+    margin:0;
+}
+
+#go_to_yify{
+cursor:pointer;
+}
+
+#thumbnail_modal {
+width: auto;
+left: 75%;
+}
+
+#thumbnail_modal img{
+max-width: 369px;
+}
+.thumbnail_yify{
+    cursor:pointer;
+}
+
+#options{
+    font-size: 9px;
+    line-height: 9px;
+}
+
+#defaultUrlModal .control-label{
+    width: 120px;
+}
+
+#defaultUrlModal .control-group{
+    margin-bottom: 0px;
+}
+
+#defaultUrlModal .controls{
+    margin-left: 130px;
+}
+
+#defaultUrlModal form{
+    margin-bottom: 0px;
+}
+
+#defaultUrlModal input[type="text"]{
+    margin-bottom: 5px;
+}
+
+#defaultUrlModal select{
+    margin-bottom: 5px;
+}
+
+#defaultUrlModal input[type="checkbox"]{
+    margin-top: 0;
+    margin-left: 2px;
+}
+
+#defaultFolderModal .control-label{
+    width: 120px;
+}
+
+#defaultFolderModal .control-group{
+    margin-bottom: 0px;
+}
+
+#defaultFolderModal .controls{
+    margin-left: 130px;
+}
+
+#defaultFolderModal form{
+    margin-bottom: 0px;
+}
+
+#defaultFolderModal select{
+    margin-bottom: 5px;
+    width: auto;
+    max-width: 100%;
+}
+
+.select{
+    width: auto;
+}
+
+#filter{
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#filter label{
+    margin-right: 5px;
+    font-size: 12px;
+}
+
+#tab_search button{
+    margin-top: 5px;
+}
+
+#search_category{
+    margin-top: 5px;
+}
+
+#search_title{
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 52%;
+}
+
+#last_movies_button{
+    margin-left: 5px;
+}

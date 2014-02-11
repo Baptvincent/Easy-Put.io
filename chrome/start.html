@@ -10,13 +10,6 @@
         <script type="text/javascript" src="js/storage.js"></script>
         <script type="text/javascript" src="js/function.js"></script>
         <script type="text/javascript" src="js/putio.js"></script>
-        <script type="text/javascript" src="js/piratebay.js"></script>
-        <script type="text/javascript" src="js/old_piratebay.js"></script>
-        <script type="text/javascript" src="js/kickasstorrents.js"></script>
-        <script type="text/javascript" src="js/yify.js"></script>
-        <script type="text/javascript" src="js/opensubtitles.js"></script>
-        <script type="text/javascript" src="js/jquery.xml2json.js"></script>
-        <script type="text/javascript" src="js/jquery.xmlrpc.min.js"></script>
         <script type="text/javascript" src="js/jquery.simplePagination.js"></script>
         <script type="text/javascript" src="js/tracking.js"></script>
         <script type="text/javascript" src="js/language.js"></script>
@@ -26,9 +19,6 @@
         <ul class="nav nav-tabs navbar-fixed-top" id="menu">
             <li id="logo">
                 <img src="img/putio128.png">
-            </li>
-            <li class="active">
-                <a id="search" href="#">Search</a>
             </li>
             <li >
                 <a id="files" href="#">Files</a>
@@ -77,101 +67,6 @@
                   <a class="btn btn-primary yes" href="#">Move</a> <a class="btn" href="#" data-dismiss="modal">Cancel</a>
                 </p>
             </div>
-        </div>
-        <div id="defaultUrlModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="alert alert-block alert-info fade in " id="clean_alert">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <p><h4 class="alert-heading">Default Urls</h4></p>
-
-                <form class="form-horizontal">
-                  <div class="control-group">
-                    <label class="control-label">The Pirate Bay : </label>
-                    <div class="controls">
-                      <input type="text" id="pb_url" placeholder="E.g : http://thepiratebay.sx"><input id="old_api" type="checkbox"> Use old API
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label class="control-label">KickassTorrents : </label>
-                    <div class="controls">
-                      <input type="text" id="kat_url" placeholder="E.g : http://kickass.to">
-                    </div>
-                  </div>
-                </form>
-                <p>
-                  <a class="btn btn-primary yes" type="default_url" href="#">Save</a> <a class="btn" href="#" data-dismiss="modal">Cancel</a>
-                </p>
-            </div>
-        </div>
-
-        <div id="defaultFolderModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="alert alert-block alert-info fade in " id="clean_alert">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <p><h4 class="alert-heading">Default Folders</h4></p>
-
-                <form class="form-horizontal">
-                    <div class="control-group">
-                    <label class="control-label">All / Links : </label>
-                    <div class="controls">
-                      <select class="default_folder_list" id="folder_id_all">
-                    </select>
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label class="control-label">Movies : </label>
-                    <div class="controls">
-                      <select class="default_folder_list" id="folder_id_movies">
-                    </select>
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label class="control-label">TV Shows : </label>
-                    <div class="controls">
-                      <select class="default_folder_list" id="folder_id_tvshows">
-                    </select>
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label class="control-label">Music : </label>
-                    <div class="controls">
-                      <select class="default_folder_list" id="folder_id_music">
-                    </select>
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label class="control-label">Games : </label>
-                    <div class="controls">
-                      <select class="default_folder_list" id="folder_id_games">
-                    </select>
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label class="control-label">Applications : </label>
-                    <div class="controls">
-                      <select class="default_folder_list" id="folder_id_applications">
-                    </select>
-                    </div>
-                  </div>
-                </form>
-                <p>
-                  <a class="btn btn-primary yes" type="default_folder" href="#">Save</a> <a class="btn" href="#" data-dismiss="modal">Cancel</a>
-                </p>
-            </div>
-        </div>
-
-        <div id="defaultSubtitleSelectModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="alert alert-block alert-info fade in " id="clean_alert">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <p><h4 class="alert-heading">Default Subtitle in</h4></p>
-                <p>
-                    <select id="subtitle_code">
-                    </select>
-                </p>
-                <p>
-                  <a class="btn btn-primary yes" type="default_subtitle" href="#">Save</a> <a class="btn" href="#" data-dismiss="modal">Cancel</a>
-                </p>
-            </div>
-        </div>
-        <div id="thumbnail_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         </div>
     </body>
 </html>
