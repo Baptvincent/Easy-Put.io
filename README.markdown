@@ -2,7 +2,7 @@ Easy Put.io.
 ---
 <center>
 
-![SCreenshot](https://github.com/Baptvincent/Easy-Put.io/Screenshots/files.png)
+![SCreenshot](https://raw.github.com/Baptvincent/Easy-Put.io/master/Screenshots/files.png)
 
 </center>
 
