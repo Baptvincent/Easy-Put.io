@@ -1,7 +1,7 @@
 Easy Put.io.
 ---
 
-Go [Here](http://easy-putio.baptiste-vincent.fr) to download the extension.
+Go [here](http://easy-putio.baptiste-vincent.fr) to download the extension.
 
 ---
 <center>
