@@ -230,13 +230,28 @@ Background = {
     },
 
     checkVersion:function(){
+        extension_id = chrome.i18n.getMessage("@@extension_id");
+
+        switch(extension_id){
+            case 'pemaikhombbppaapikdcehblmphgeada'://dev
+                origin = 'Dev';
+            break;
+            case 'ekbocpjgbpkkheehgnimdnkmkapkagap'://store
+                origin = 'Chrome Store';
+            break;
+            case 'gbohaejoknbaiedjbggkhkkkjboiacdi'://website
+                origin = 'Website';
+              break;
+        }
+
         $.getJSON("manifest.json", function(manifest) {
             if (!localStorage["version"]){
-                _gaq.push(['_trackEvent', 'install', manifest.version]);
+                _gaq.push(['_trackEvent', origin, 'install',manifest.version]);
                 localStorage["version"]=manifest.version;
             }
             else if (localStorage["version"]!=manifest.version){
                 _gaq.push(['_trackEvent', 'update', manifest.version, localStorage["version"]]);
+                _gaq.push(['_trackEvent', origin, 'update', manifest.version]);
                 localStorage["version"]=manifest.version;
                 $.getJSON("changelog.json", function(data) {
                     var changelog='';
@@ -263,12 +278,8 @@ Background = {
             today.setUTCMilliseconds(0);
             today=today.getTime();
 
-            if (!localStorage["date_check_version"]){
-                _gaq.push(['_trackEvent', 'version', manifest.version]);
-                localStorage["date_check_version"]=today;
-            }
-            else if(today!=localStorage["date_check_version"]){
-                _gaq.push(['_trackEvent', 'version', manifest.version]);
+            if (!localStorage["date_check_version"] || today!=localStorage["date_check_version"]){
+                _gaq.push(['_trackEvent', origin, 'version', manifest.version]);
                 localStorage["date_check_version"]=today;
             }
         });

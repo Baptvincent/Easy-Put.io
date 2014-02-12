@@ -1,25 +1,26 @@
 $(document).ready(function() {
     $(document.body).on('click', '#connect' ,function(e){
         
-            extension_id = chrome.i18n.getMessage("@@extension_id");
+        extension_id = chrome.i18n.getMessage("@@extension_id");
+        
+        switch(extension_id){
+        
+            case 'pemaikhombbppaapikdcehblmphgeada'://dev
+                client_id = '1117';
+            break;
+            case 'ekbocpjgbpkkheehgnimdnkmkapkagap'://store
+                client_id = '893';
+            break;
+            case 'gbohaejoknbaiedjbggkhkkkjboiacdi'://website
+                client_id = '230';
+            break;
+        }
             
-            switch(origin){
-                case 'pemaikhombbppaapikdcehblmphgeada'://dev
-                  client_id = '1117';
-                  break;
-                case 'ekbocpjgbpkkheehgnimdnkmkapkagap'://store
-                  client_id = '893';
-                  break;
-                case 'gbohaejoknbaiedjbggkhkkkjboiacdi'://website
-                  client_id = '230';
-                  break;
-              }
-            
-            window.location = "https://api.put.io/v2/oauth2/authenticate?client_id="+client_id+"&response_type=token&redirect_uri=chrome-extension://"+extension_id+"/options.html"
+        window.location = "https://api.put.io/v2/oauth2/authenticate?client_id="+client_id+"&response_type=token&redirect_uri=chrome-extension://"+extension_id+"/options.html"
     });
 
     $(document.body).on('click', '#gettoken' ,function(e){
-        url = "https://api.put.io/v2/oauth2/authenticate?client_id=1121&response_type=token&redirect_uri=http://easy-putio.baptiste-vincent.fr/get_token.php";
+        url = "https://api.put.io/v2/oauth2/authenticate?client_id=1121&response_type=token&redirect_uri=http://easy-putio.baptiste-vincent.fr/get_token.html";
         window.open(url, '_blank');
     });
 
