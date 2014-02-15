@@ -823,7 +823,7 @@ Putio_Function = {
                         content+='<a class="remove" data-toggle="tooltip" data-placement="left" title="" data-original-title="Remove" value="'+value.id+'" href="#"><span class="glyphicon glyphicon-remove"></span></a>';
                         content+='<a class="download_file" data-toggle="tooltip" data-placement="left" title="" data-original-title="Download" value="'+value.file_id+'" href="#"><span class="glyphicon glyphicon-download-alt"></span></a>';
                         content+='<a class="show_file" data-toggle="tooltip" data-placement="left" title="" data-original-title="Show File" value="'+value.file_id+'" href="#"><span class="glyphicon glyphicon-folder-open"></span></a>';
-                        content+='<a class="go_to_file" data-toggle="tooltip" data-placement="left" title="" data-original-title="See on Put.io" value="'+value.file_id+'" href="#"><span class="glyphicon glyphicon-chevron-down"></span></a>';
+                        content+='<a class="go_to_file" data-toggle="tooltip" data-placement="left" title="" data-original-title="See on Put.io" value="'+value.file_id+'" href="#"><span class="glyphicon glyphicon-chevron-right"></span></a>';
                     }
                     else if(value.status=='COMPLETING'){
                         content+='<a class="remove" data-toggle="tooltip" data-placement="left" title="" data-original-title="Remove" value="'+value.id+'" href="#"><span class="glyphicon glyphicon-remove"></span></a>';
