@@ -21,13 +21,13 @@ Putio_Function = {
                         percent_available=Math.round(percent_available * 100) / 100;
 
                         if(percent_available>90){
-                            style="bar-danger";
+                            style="progress-bar-danger";
                         }
                         else if(percent_available>80){
-                            style="bar-warning";
+                            style="progress-bar-warning";
                         }
                         else {
-                            style="bar-success";
+                            style="progress-bar-success";
                         }
 
                         content='';
