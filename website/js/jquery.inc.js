@@ -470,7 +470,7 @@ $(document).ready(function() {
     });
 
     $(document.body).on('mouseenter', '#last_movies_list .first' ,function(e){
-        $(this).closest('tr').children('td.first').css("background-color", "#0088cc");
+        $(this).closest('tr').children('td.first').css("background-color", "#428bca");
         $(this).closest('tr').children('td.first').css("color", "#FFFFFF");
     });
 
@@ -480,7 +480,7 @@ $(document).ready(function() {
     });
 
     $(document.body).on('mouseenter', '#last_movies_list .second' ,function(e){
-        $(this).closest('tr').children('td.second').css("background-color", "#0088cc");
+        $(this).closest('tr').children('td.second').css("background-color", "#428bca");
         $(this).closest('tr').children('td.second').css("color", "#FFFFFF");
     });
 

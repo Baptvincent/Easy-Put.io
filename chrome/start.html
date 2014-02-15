@@ -34,38 +34,50 @@
         </ul>
         <div id="content"></div>
 
-        <div id="myAlertModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="alert alert-block alert-info fade in " id="clean_alert">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <p><h4 class="alert-heading"></h4></p>
-                <p>
-                  <a class="btn btn-primary yes" href="#">Yes</a> <a class="btn" href="#" data-dismiss="modal">No</a>
-                </p>
+        <div id="myAlertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="alert alert-block alert-info fade in " id="clean_alert">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <p><h4 class="alert-heading"></h4></p>
+                        <p>
+                          <a class="btn btn-primary yes" href="#">Yes</a> <a class="btn btn-default" href="#" data-dismiss="modal">No</a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="myNameInputModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="alert alert-block alert-info fade in " id="clean_alert">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <p><h4 class="alert-heading"></h4></p>
-                <p><input type="text"></input></p>
-                <p>
-                  <a class="btn btn-primary yes" href="#">Save</a> <a class="btn" href="#" data-dismiss="modal">Cancel</a>
-                </p>
+        <div id="myNameInputModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="alert alert-block alert-info fade in " id="clean_alert">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <p><h4 class="alert-heading"></h4></p>
+                        <p><input type="text" class="form-control"></input></p>
+                        <p>
+                          <a class="btn btn-primary yes" href="#">Save</a> <a class="btn btn-default" href="#" data-dismiss="modal">Cancel</a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="myNameFolderSelectModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="alert alert-block alert-info fade in " id="clean_alert">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <p><h4 class="alert-heading"></h4></p>
-                <p>
-                    <select id="folder_id">
-                    </select>
-                </p>
-                <p>
-                  <a class="btn btn-primary yes" href="#">Move</a> <a class="btn" href="#" data-dismiss="modal">Cancel</a>
-                </p>
+        <div id="myNameFolderSelectModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="alert alert-block alert-info fade in " id="clean_alert">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <p><h4 class="alert-heading"></h4></p>
+                        <p>
+                            <select id="folder_id" class="form-control">
+                            </select>
+                        </p>
+                        <p>
+                          <a class="btn btn-primary yes" href="#">Move</a> <a class="btn btn-default" href="#" data-dismiss="modal">Cancel</a>
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
     </body>
