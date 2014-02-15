@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Easy Put.io",
-    "version": "2.3.9",
+    "version": "2.4",
     "description": "Send links to download on Put.io",
     "homepage_url": "http://easy-putio.baptiste-vincent.fr",
     "update_url": "http://easy-putio.baptiste-vincent.fr/update.xml",

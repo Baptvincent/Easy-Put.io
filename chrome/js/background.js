@@ -185,9 +185,9 @@ Background = {
 
     start:function(){
         if(localStorage['putio_token']){
-            Storage.saveData('putio_token',localStorage['putio_token'])
+            Storage.saveData('putio_token',localStorage['putio_token']);
+            localStorage.removeItem("putio_token");
         }
-        localStorage.removeItem("putio_token");
 
         clearTimeout(this.time_start);
         Storage.getData(function(storage){
@@ -233,15 +233,18 @@ Background = {
         extension_id = chrome.i18n.getMessage("@@extension_id");
 
         switch(extension_id){
-            case 'pemaikhombbppaapikdcehblmphgeada'://dev
-                origin = 'Dev';
+            case 'ojjijgofhokdmbpllnkjiciihicgeebf'://dev
+                origin = 'Website Dev';
+            break;
+            case 'hbjilidlcmlnlpfoglhijpnfajlggdfn'://dev
+                origin = 'Chrome Dev';
+            break;
+            case 'gbohaejoknbaiedjbggkhkkkjboiacdi'://website
+                origin = 'Website';
             break;
             case 'ekbocpjgbpkkheehgnimdnkmkapkagap'://store
                 origin = 'Chrome Store';
             break;
-            case 'gbohaejoknbaiedjbggkhkkkjboiacdi'://website
-                origin = 'Website';
-              break;
         }
 
         $.getJSON("manifest.json", function(manifest) {

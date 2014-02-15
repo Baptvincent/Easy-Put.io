@@ -4,15 +4,17 @@ $(document).ready(function() {
         extension_id = chrome.i18n.getMessage("@@extension_id");
         
         switch(extension_id){
-        
-            case 'pemaikhombbppaapikdcehblmphgeada'://dev
+            case 'ojjijgofhokdmbpllnkjiciihicgeebf'://Website Dev
                 client_id = '1117';
             break;
-            case 'ekbocpjgbpkkheehgnimdnkmkapkagap'://store
-                client_id = '893';
+            case 'hbjilidlcmlnlpfoglhijpnfajlggdfn'://dev
+                client_id = '1117';
             break;
             case 'gbohaejoknbaiedjbggkhkkkjboiacdi'://website
                 client_id = '230';
+            break;
+            case 'ekbocpjgbpkkheehgnimdnkmkapkagap'://store
+                client_id = '893';
             break;
         }
             

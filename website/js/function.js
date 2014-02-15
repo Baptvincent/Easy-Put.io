@@ -21,19 +21,19 @@ Putio_Function = {
                         percent_available=Math.round(percent_available * 100) / 100;
 
                         if(percent_available>90){
-                            style="bar-danger";
+                            style="progress-bar-danger";
                         }
                         else if(percent_available>80){
-                            style="bar-warning";
+                            style="progress-bar-warning";
                         }
                         else {
-                            style="bar-success";
+                            style="progress-bar-success";
                         }
 
                         content='';
                         content+='<div class="progress storage_available">';
                         content+='<span id="disk_used">Used : '+percent_available+'% ('+diskAvailable+' Free)</span>';
-                        content+='<div class="bar '+style+'" style="width: '+percent_available+'%;"></div>';
+                        content+='<div class="progress-bar '+style+'" role="progressbar" aria-valuenow="'+percent_available+'" aria-valuemin="0" aria-valuemax="100" style="width: '+percent_available+'%">';
                         content+='</div>';
 
                         $('#account_info').html(content);
@@ -311,14 +311,14 @@ Putio_Function = {
                 content+='<thead>';
                 content+='<tr class="text-left">';
                 content+='<th colspan="2" style="width: 9%">';
-                content+='<a id="delete_files" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete Files" href="#"><i class="icon-remove"></i></a>';
-                content+='<a id="move_files" data-toggle="tooltip" data-placement="top" title="" data-original-title="Move Files" href="#"><i class="icon-share"></i></a>';
-                content+='<a id="download_zip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Zip" href="#"><i class="icon-download-alt"></i></a>';
+                content+='<a id="delete_files" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete Files" href="#"><span class="glyphicon glyphicon-remove"></span></a>';
+                content+='<a id="move_files" data-toggle="tooltip" data-placement="top" title="" data-original-title="Move Files" href="#"><span class="glyphicon glyphicon-share"></span></a>';
+                content+='<a id="download_zip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Download Zip" href="#"><span class="glyphicon glyphicon-download-alt"></span></a>';
                 content+='</th>';
                 if(parent.parent_id!=undefined){
                     content+='<th style="width: 7%">';
-                    content+='<a class="folder" value='+parent.parent_id+' data-toggle="tooltip" data-placement="top" title="" data-original-title="Back" href="#"><i class="icon-arrow-left"></i></a>';
-                    content+='<a class="folder" value="0" data-toggle="tooltip" data-placement="top" title="" data-original-title="Home" href="#"><i class="icon-home"></i></a>';
+                    content+='<a class="folder" value='+parent.parent_id+' data-toggle="tooltip" data-placement="top" title="" data-original-title="Back" href="#"><span class="glyphicon glyphicon-arrow-left"></span></a>';
+                    content+='<a class="folder" value="0" data-toggle="tooltip" data-placement="top" title="" data-original-title="Home" href="#"><span class="glyphicon glyphicon-home"></span></a>';
                     content+='</th>';
                     content+='<th style="width: 63%">';
                 }
@@ -334,7 +334,7 @@ Putio_Function = {
                 content+='<small>'+Putio_Function.bytesToSize(parent.size,2)+'</small>';
                 content+='</th>';
                 content+='<th style="width: 7%">';
-                content+='<a id="create_folder" data-toggle="tooltip" data-placement="left" title="" data-original-title="Create Folder" value="'+id+'" href="#"><i class="icon-plus"></i></a>';
+                content+='<a id="create_folder" data-toggle="tooltip" data-placement="left" title="" data-original-title="Create Folder" value="'+id+'" href="#"><span class="glyphicon glyphicon-plus"></span></a>';
                 content+='</th>';
                 content+='</tr>';
                 content+='</thead>';
@@ -363,9 +363,9 @@ Putio_Function = {
                     content+='<small>'+Putio_Function.bytesToSize(value.size,2)+'</small>';
                     content+='</td>';
                     content+='<td>';
-                    content+='<a class="rename" data-toggle="tooltip" data-placement="left" title="" data-original-title="Rename" value="'+value.id+'" href="#"><i class="icon-edit"></i></a>';
+                    content+='<a class="rename" data-toggle="tooltip" data-placement="left" title="" data-original-title="Rename" value="'+value.id+'" href="#"><span class="glyphicon glyphicon-edit"></span></a>';
                     if(value.opensubtitles_hash){
-                       content+='<a class="search_subtile" data-toggle="tooltip" data-placement="left" title="" data-original-title="Subtitles" value="'+value.id+'" hash="'+value.opensubtitles_hash+'" size="'+value.size+'" href="#"><i class="icon-search"></i></a>'; 
+                       content+='<a class="search_subtile" data-toggle="tooltip" data-placement="left" title="" data-original-title="Subtitles" value="'+value.id+'" hash="'+value.opensubtitles_hash+'" size="'+value.size+'" href="#"><span class="glyphicon glyphicon-search"></span></a>'; 
                     }
                     content+='</td>';
                     content+='</tr>';
@@ -427,17 +427,19 @@ Putio_Function = {
 
         content+='<div class="form-inline" id="search_form">';
 
-        content+='<select id="search_category" class="select">';
+        content+='<select id="search_category" class="select form-control">';
         content+='<option value="kickasstorrents" >KAT</option>';
         content+='<option value="piratebay" >TPB</option>';
         content+='<option value="opensubtitle" >OS</option>';
         content+='<option value="torrent_link" >Links</option>';
         content+='</select>';
 
-        content+='<input type="text" id="search_title" placeholder="'+placeholder+'" '+inputStyle+'>';
+        content+='<input type="text" class="form-control" id="search_title" placeholder="'+placeholder+'">';
+
         content+='<button class="btn btn-primary" id="submit_search">'+buttonText+'</button>';
-        content+='<button class="btn" id="last_movies_button" set="1">Latest Movies</button>';
-        content+='<br><textarea rows="3" cols="50" id="send_link" placeholder="Add new files to Put.io" style="display:'+textareaStyle+';"></textarea>';
+        content+='<button class="btn btn-default" id="last_movies_button" set="1">Latest Movies</button>';
+
+        content+='<br><textarea rows="3" class="form-control" cols="50" id="send_link" placeholder="Add new files to Put.io" style="display:'+textareaStyle+';"></textarea>';
         content+='<div id="filter"><label class="radio"><input type="radio" name="search_filter" class="search_filter" value="all" checked>All</label>';
         content+='<label class="radio"><input type="radio" name="search_filter" class="search_filter" value="movies">Movies</label>';
         content+='<label class="radio"><input type="radio" name="search_filter" class="search_filter" value="tvshows">TV Shows</label>';
@@ -722,17 +724,17 @@ Putio_Function = {
             content+='<tr>';
             content+='<th colspan="4" class="text-left">';
             content+='<div id="powered_by" >Powered by <span id="go_to_yify">YIFY Torrents</span></div>';
-            content+='<div class="pagination pagination-mini">';
+            content+='<ul class="pagination pagination-xs">';
             
-            content+='</div>';
+            content+='</ul>';
             content+='</th>';
             content+='</thead>';
 
             content+='<tfoot>';
             content+='<tr>';
             content+='<th colspan="4" class="text-right">';
-            content+='<div class="pagination pagination-mini">';
-            content+='</div>';
+            content+='<ul class="pagination pagination-xs">';
+            content+='</ul>';
             content+='</th>';
             content+='</tfoot>';
 
@@ -748,8 +750,8 @@ Putio_Function = {
                 info+='<strong>Genre : </strong>'+value.Genre+'</br>';
                 info+='<strong>IMDB Rating : </strong>'+value.MovieRating+'</br>';
                 info+='<strong>Peers: </strong>'+value.TorrentPeers+' <strong>Seeds: </strong>'+value.TorrentSeeds+'</br>';
-                info+='<button class="btn btn-mini show_on_imdb" type="button" url="'+value.ImdbLink+'">View On IMDB</button>';
-                info+='<button class="btn btn-mini send_to_putio" from="YIFY" type="button" magnet="'+value.TorrentUrl+'">Send to Put.io</button>';
+                info+='<button class="btn btn-default btn-xs show_on_imdb" type="button" url="'+value.ImdbLink+'">View On IMDB</button>';
+                info+='<button class="btn btn-default btn-xs send_to_putio" from="YIFY" type="button" magnet="'+value.TorrentUrl+'">Send to Put.io</button>';
                 info+='</td>';
 
                 if(index%2==0){
@@ -797,34 +799,38 @@ Putio_Function = {
                     if(value.status=='COMPLETED')//green
                     {
                         value.percent_done=100;
-                        content+='<div class="progress progress-success transfer_progress">';
+                        content+='<div class="progress transfer_progress">';
+                        type="progress-bar-success";
                     }
                     else if(value.status=='SEEDING' && value.percent_done=='100')//green active
                     {
                         value.percent_done=100;
-                        content+='<div class="progress progress-success progress-striped active transfer_progress">';
+                        content+='<div class="progress progress-striped active transfer_progress">';
+                        type="progress-bar-success";
                     }
                     else if(value.down_speed==0 && value.status!='COMPLETING'){//orange
-                        content+='<div class="progress progress-warning progress-striped transfer_progress">';
+                        content+='<div class="progress progress-striped transfer_progress">';
+                        type="progress-bar-warning";
                     }
                     else{//blue
                         content+='<div class="progress progress-striped active transfer_progress">';
+                        type="";
                     }
                     content+='<span class="transfer_name">'+value.name+'<span class="edit_transfer">';
 
                     if(value.status=='COMPLETED' || (value.status=='SEEDING' && value.percent_done=='100'))
                     {
-                        content+='<a class="remove" data-toggle="tooltip" data-placement="left" title="" data-original-title="Remove" value="'+value.id+'" href="#"><i class="icon-remove"></i></a>';
-                        content+='<a class="download_file" data-toggle="tooltip" data-placement="left" title="" data-original-title="Download" value="'+value.file_id+'" href="#"><i class="icon-download-alt"></i></a>';
-                        content+='<a class="show_file" data-toggle="tooltip" data-placement="left" title="" data-original-title="Show File" value="'+value.file_id+'" href="#"><i class="icon-folder-open"></i></a>';
-                        content+='<a class="go_to_file" data-toggle="tooltip" data-placement="left" title="" data-original-title="See on Put.io" value="'+value.file_id+'" href="#"><i class="icon-chevron-right"></i></a>';
+                        content+='<a class="remove" data-toggle="tooltip" data-placement="left" title="" data-original-title="Remove" value="'+value.id+'" href="#"><span class="glyphicon glyphicon-remove"></span></a>';
+                        content+='<a class="download_file" data-toggle="tooltip" data-placement="left" title="" data-original-title="Download" value="'+value.file_id+'" href="#"><span class="glyphicon glyphicon-download-alt"></span></a>';
+                        content+='<a class="show_file" data-toggle="tooltip" data-placement="left" title="" data-original-title="Show File" value="'+value.file_id+'" href="#"><span class="glyphicon glyphicon-folder-open"></span></a>';
+                        content+='<a class="go_to_file" data-toggle="tooltip" data-placement="left" title="" data-original-title="See on Put.io" value="'+value.file_id+'" href="#"><span class="glyphicon glyphicon-chevron-down"></span></a>';
                     }
                     else if(value.status=='COMPLETING'){
-                        content+='<a class="remove" data-toggle="tooltip" data-placement="left" title="" data-original-title="Remove" value="'+value.id+'" href="#"><i class="icon-remove"></i></a>';
+                        content+='<a class="remove" data-toggle="tooltip" data-placement="left" title="" data-original-title="Remove" value="'+value.id+'" href="#"><span class="glyphicon glyphicon-remove"></span></a>';
                     }
                     else{
                         content+='<strong>'+Putio_Function.seconds_to_time(value.estimated_time,false)+' </strong>';
-                        content+='<a class="remove" data-toggle="tooltip" data-placement="left" title="" data-original-title="Remove" value="'+value.id+'" href="#"><i class="icon-remove"></i></a>';
+                        content+='<a class="remove" data-toggle="tooltip" data-placement="left" title="" data-original-title="Remove" value="'+value.id+'" href="#"><span class="glyphicon glyphicon-remove"></span></a>';
                     }
 
                     content+='</span></span>';
@@ -834,7 +840,8 @@ Putio_Function = {
                     content+='<span class="edit_transfer">';
                     
                     content+='</span>';
-                    content+='<div class="bar" style="width: '+parseInt(value.percent_done)+'%">';
+                    //content+='<div class="bar" style="width: '+parseInt(value.percent_done)+'%">';
+                    content+='<div class="progress-bar '+type+'" role="progressbar" aria-valuenow="'+parseInt(value.percent_done)+'" aria-valuemin="0" aria-valuemax="100" style="width: '+parseInt(value.percent_done)+'%">';
                     content+='</div>';
                     content+='</div>';
                     content+='</td>';
@@ -842,7 +849,7 @@ Putio_Function = {
                 });
                     content+='<tr>';
                     content+='<td class="text-center">';
-                    content+='<button class="btn btn-mini btn-info" type="button" id="clean_button">Clear Finished</button>';
+                    content+='<button class="btn btn-xs btn-info" type="button" id="clean_button">Clear Finished</button>';
                     content+='</td>';
                     content+='</tr>';
                 content+='</tbody>';

@@ -185,14 +185,8 @@ Background = {
 
     start:function(){
         if(localStorage['putio_token']){
-            Storage.saveData('putio_token',localStorage['putio_token'])
-        }
-        localStorage.removeItem("putio_token");
-
-        if(!localStorage['default_routing']){
-            Putio.Account.settings(function(data){
-                localStorage['default_routing'] = data.settings.routing;
-            })
+            Storage.saveData('putio_token',localStorage['putio_token']);
+            localStorage.removeItem("putio_token");
         }
 
         clearTimeout(this.time_start);
@@ -206,12 +200,18 @@ Background = {
                         }, 1000);
                     }
                     else{ 
+                        if(!localStorage['default_routing']){
+                            Putio.Account.settings(function(data){
+                                localStorage['default_routing'] = data.settings.routing;
+                            })
+                        }
+
                         Background.time_start=setTimeout( function () {
                             Background.start();
                         }, 3600000);
                         clearTimeout(Background.time_notif);
                         Background.badge();
-                        chrome.contextMenus.removeAll()
+                        chrome.contextMenus.removeAll();
                         var contexts = ["selection","link"];
                         var url;
                         var parent_tab_id=chrome.contextMenus.create({
@@ -239,15 +239,18 @@ Background = {
         extension_id = chrome.i18n.getMessage("@@extension_id");
 
         switch(extension_id){
-            case 'pemaikhombbppaapikdcehblmphgeada'://dev
-                origin = 'Dev';
+            case 'ojjijgofhokdmbpllnkjiciihicgeebf'://dev
+                origin = 'Website Dev';
+            break;
+            case 'hbjilidlcmlnlpfoglhijpnfajlggdfn'://dev
+                origin = 'Chrome Dev';
+            break;
+            case 'gbohaejoknbaiedjbggkhkkkjboiacdi'://website
+                origin = 'Website';
             break;
             case 'ekbocpjgbpkkheehgnimdnkmkapkagap'://store
                 origin = 'Chrome Store';
             break;
-            case 'gbohaejoknbaiedjbggkhkkkjboiacdi'://website
-                origin = 'Website';
-              break;
         }
 
         $.getJSON("manifest.json", function(manifest) {
