@@ -327,7 +327,22 @@ $(document).ready(function() {
         scrollWidth=$(this)[0].scrollWidth
         $(this).delay(1000).animate({ scrollLeft: scrollWidth }, 5000);
     });
-    
+
+    $(document.body).on('click', '#donate_btn' ,function(e){
+        _gaq.push(['_trackEvent', 'more tab', 'click', 'Donate']);
+        url='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=CX9H4LRJD2QUJ&lc=US&item_name=Easy%20Put%2eio&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted';
+        chrome.tabs.create({
+            url:url
+        });
+    });
+
+    $(document.body).on('click', '#get_full_extension' ,function(e){
+        _gaq.push(['_trackEvent', 'more tab', 'click', 'Get Full Extension']);
+        url='http://easy-putio.baptiste-vincent.fr/';
+        chrome.tabs.create({
+            url:url
+        });
+    });
 
     $('#myNameInputModal').on('shown', function () {
         $("#myNameInputModal input").focus()

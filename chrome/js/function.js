@@ -52,7 +52,8 @@ Putio_Function = {
             clearTimeout(this.time);
             $("#menu li").attr('class','');
             $('#'+tab_name).parent('li').attr('class','active');
-            localStorage["tabName"] = tab_name;
+            if(tab_name!="donate")
+                localStorage["tabName"] = tab_name;
             this.loadTabContent(tab_name,folder_id);
     },
 
@@ -69,6 +70,14 @@ Putio_Function = {
             case 'transfers':
                 $("#content").html('<div id="tab_transfers"></div>');
                 this.transfersList();
+                break;
+            case 'donate':
+                //url='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=CX9H4LRJD2QUJ&lc=US&item_name=Easy%20Put%2eio&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted';
+                /*chrome.tabs.create({
+                    url:url
+                });*/
+                $("#content").html('<div id="tab_donate"></div>');
+                this.donate();
                 break;
             default:
                 break;
@@ -515,5 +524,13 @@ Putio_Function = {
     reset_link : function(element){
         setTimeout(function(){
             element.css('color','#000000')},1000);
+    },
+    donate : function(){
+        var content='';
+        content+='<div style="margin-top:60px;">';
+        content+='<p></p>';
+        content+='<p class="text-center"><button class="btn btn-lg btn-primary" id="get_full_extension" type="button" style="margin-right:10px;">Get Full Extension</button><button class="btn btn-lg btn-primary" id="donate_btn" type="button">Buy Me a Beer</button></p>';
+        content+='<div>';
+        $("#tab_donate").html(content);
     }
 }

@@ -450,7 +450,8 @@ Putio_Function = {
         content+='<label class="radio"><input type="radio" name="search_filter" class="search_filter" value="music">Music</label>';
         content+='<label class="radio"><input type="radio" name="search_filter" class="search_filter" value="games">Games</label>';
         content+='<label class="radio"><input type="radio" name="search_filter" class="search_filter" value="applications">Applications</label>';
-        content+='</div><div id="options"><strong><a data-toggle="tooltip" data-placement="right" title="" data-original-title="Change" href="#" id="select_default_url">Options</a></strong></div>';
+        content+='</div><div id="options"><strong><a data-toggle="tooltip" data-placement="right" title="" data-original-title="Change" href="#" id="select_default_url">Options</a></strong>';
+        content+=' | <strong><a data-toggle="tooltip" data-placement="right" title="" data-original-title="Buy Me a Beer" href="#" id="donate">Buy Me a Beer</a></strong></div>';
         content+='</div>';
         content+='<div id="search_result">';
         content+='</div>';

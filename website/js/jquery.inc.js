@@ -615,6 +615,14 @@ $(document).ready(function() {
          })
     });
 
+    $(document.body).on('click', '#donate' ,function(e){
+        _gaq.push(['_trackEvent', 'more tab', 'click', 'Donate']);
+        url='https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=CX9H4LRJD2QUJ&lc=US&item_name=Easy%20Put%2eio&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted';
+        chrome.tabs.create({
+            url:url
+        });
+    });
+
     $(document.body).on('change', '#old_api' ,function(e){
         if($('#old_api').is(':checked'))
             $("#pb_url").prop('disabled', true);
