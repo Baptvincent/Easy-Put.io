@@ -143,6 +143,14 @@ Putio = {
             Putio._request('files', 'search', params,function(data){
                 output(data);
             });
+        },
+        getDownloadLink : function(ids,output) {
+            var params = {
+                'file_ids' : ids
+            };
+            Putio._request('files', 'get-download-links', params,'POST',function(data){
+                output(data);
+            });
         }
     },
 
@@ -200,5 +208,5 @@ Putio = {
             });
         })
 
-}
+    }
 };

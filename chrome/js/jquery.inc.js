@@ -69,7 +69,57 @@ $(document).ready(function() {
         });
     });
 
+    $(document.body).on('click', '#copy_links' ,function(e){
+        e.preventDefault();
+        var ids=[];
+        $("input[name=delete]:checked").each(function() {
+            ids.push($(this).val());
+        });
+        if(ids.length>0){
+            ids=ids.toString();
+            link_elememt=$('#copy_links').children();
+            Putio.Files.getDownloadLink(ids,function(data){
+                if(data.download_links.length>0){
+                    download_links = data.download_links.join("\n");
+                    Putio_Function.copy_links(download_links,link_elememt,'#5cb85c');
+                    _gaq.push(['_trackEvent', 'files tab', 'click', 'Copy Links']);
+                }
+                else{
+                    link_elememt.css('color','#d9534f');
+                }
+            })
+        }
+    });
+
+    $(document.body).on('mouseleave', '#copy_links' ,function(e){
+        link=$(this).children();
+        if(link.css('color')!='rgb(0, 0, 0)')
+        Putio_Function.reset_link(link);
+    });
+
+    $(document.body).on('click', '.copy_link' ,function(e){
+        e.preventDefault();
+        link_elememt=$(this).children();
+        Putio.Files.getDownloadLink($(this).attr("value"),function(data){
+            if(data.download_links.length>0){
+                download_links = data.download_links.join("\n");
+                Putio_Function.copy_links(download_links,link_elememt,'#428bca');
+                _gaq.push(['_trackEvent', 'transfers tab', 'click', 'Copy Link']);
+            }
+            else{
+                link_elememt.css('color','#d9534f');
+            }
+        })
+    });
+
+    $(document.body).on('mouseleave', '.copy_link' ,function(e){
+        link=$(this).children();
+        if(link.css('color')!='rgb(0, 0, 0)')
+        Putio_Function.reset_link(link);
+    });
+
     $(document.body).on('click', '.show_file' ,function(e){
+        e.preventDefault();
         var fileId=$(this).attr("value");
         _gaq.push(['_trackEvent', 'transfers tab', 'click', 'Show file on file tab']);
         Putio.Files.info(fileId,function(data){
@@ -83,6 +133,7 @@ $(document).ready(function() {
     });
 
     $(document.body).on('click', '.go_to_file' ,function(e){
+        e.preventDefault();
         var file_url = "https://put.io/file/"+$(this).attr("value");
         _gaq.push(['_trackEvent', 'transfers tab', 'click', 'Show File on Put.io']);
         chrome.tabs.create({
@@ -91,6 +142,7 @@ $(document).ready(function() {
     });
 
     $(document.body).on('click', '.download_file' ,function(e){
+        e.preventDefault();
         var fileId=$(this).attr("value");
         Putio.Files.info(fileId,function(data){
             if(data.status!='ERROR'){
@@ -112,11 +164,13 @@ $(document).ready(function() {
     });
 
     $(document.body).on('click', '#clean_button' ,function(e){
+        e.preventDefault();
         _gaq.push(['_trackEvent', 'transfers tab', 'click', 'Clean Transfer']);
         Putio.Transfers.clean(function(data){})
     });
 
     $(document.body).on('click', '.remove' ,function(e){
+        e.preventDefault();
         $('#myAlertModal h4').text('Are you sure you want to remove the transfer?');
         $('#myAlertModal .yes').attr('type','remove_transfer');
         $('#myAlertModal .yes').attr('value',$(this).attr("value"));
@@ -174,7 +228,16 @@ $(document).ready(function() {
         $('#myNameFolderSelectModal').modal('hide');
     });
 
+    $(document.body).on('click', '#select_all' ,function(e){
+        if($(this).prop("checked"))
+            $("input[name=delete]").prop( "checked" ,true);
+        else
+            $("input[name=delete]").prop( "checked" ,false);
+
+    });
+
     $(document.body).on('click', '.rename' ,function(e){
+        e.preventDefault();
         myFile=$('#file_list td[value='+$(this).attr("value")+']');
         $('#myNameInputModal h4').text('Rename to : ');
         $('#myNameInputModal input').val(myFile.text());
@@ -253,48 +316,17 @@ $(document).ready(function() {
         }
     });
 
-    $(document.body).on('click', '.send_to_putio' ,function(e){
-        from=$(this).attr('from');
-        magnet=$(this).attr('magnet');
-        background=chrome.extension.getBackgroundPage();
-
-        if(from=='YIFY'){
-            folder="default_movies_folder_id";
-        }
-        else {
-            switch (Putio.category) {
-                case 'movies':
-                    folder="default_movies_folder_id";
-                break;
-                case 'tvshows':
-                    folder="default_tvshows_folder_id";
-                break;
-                case 'music':
-                    folder="default_music_folder_id";
-                break;
-                case 'games':
-                    folder="default_games_folder_id";
-                break;
-                case 'applications':
-                    folder="default_applications_folder_id";
-                break;
-                default:
-                     folder="default_folder_id";
-                break;
-            }
-        }
-
-        background.Background.sendtoputio(magnet,localStorage[folder], 'search tab', from+' Send to Put.io');
+    $(document.body).on('mouseleave', '#file_list th:nth-child(4), #file_list td:nth-child(3), #result_list td:nth-child(3), #subtitle_result_list td:nth-child(2)' ,function(e){
+        $(this).stop();
+        $(this).stop();
+        $(this).animate({ scrollLeft: 0 });
     });
 
-    /*$(document.body).on('click', '#last_movies_button' ,function(e){
-        $("#search_result").html('<div id="yify_result"></div>');
-        var page = $(this).attr("set");
-        _gaq.push(['_trackEvent', 'search tab','click', "Latest Movie"]);
-        Yify.Files.list(page,function(data){
-            Putio_Function.displayLastMovies(data);
-        })
-    });*/
+    $(document.body).on('mouseenter', '#file_list th:nth-child(4), #file_list td:nth-child(3), #result_list td:nth-child(3), #subtitle_result_list td:nth-child(2)' ,function(e){
+        $(this).stop();
+        scrollWidth=$(this)[0].scrollWidth
+        $(this).delay(1000).animate({ scrollLeft: scrollWidth }, 5000);
+    });
     
 
     $('#myNameInputModal').on('shown', function () {

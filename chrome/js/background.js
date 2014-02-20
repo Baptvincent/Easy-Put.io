@@ -245,6 +245,9 @@ Background = {
             case 'ekbocpjgbpkkheehgnimdnkmkapkagap'://store
                 origin = 'Chrome Store';
             break;
+            default:
+                origin = 'Other';
+            break;
         }
 
         $.getJSON("manifest.json", function(manifest) {
@@ -286,6 +289,17 @@ Background = {
                 localStorage["date_check_version"]=today;
             }
         });
+    },
+    copyToClipboard : function(text){
+        var copyDiv = document.createElement('div');
+        var input = document.createElement("textarea");
+        input.value = text;
+        copyDiv.appendChild(input); //appendChild
+        document.body.appendChild(copyDiv);
+        input.focus();
+        document.execCommand('SelectAll');
+        document.execCommand("Copy", false, null);
+        document.body.removeChild(copyDiv);
     }
 }
 Background.start();

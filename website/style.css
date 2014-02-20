@@ -45,7 +45,7 @@ cursor:pointer;
 }
 
 #file_list td:nth-child(3),
-#file_list th:nth-child(3),
+#file_list th:nth-child(4),
 #result_list td:nth-child(3),
 #subtitle_result_list td:nth-child(2)
 {
@@ -55,7 +55,7 @@ cursor:pointer;
 }
 
 #file_list td:nth-child(3):hover,
-#file_list th:nth-child(3):hover,
+#file_list th:nth-child(4):hover,
 #result_list td:nth-child(3):hover,
 #subtitle_result_list td:nth-child(2):hover
 {
@@ -63,7 +63,7 @@ cursor:pointer;
 }
 
 #file_list td:nth-child(3)::-webkit-scrollbar,
-#file_list th:nth-child(3)::-webkit-scrollbar,
+#file_list th:nth-child(4)::-webkit-scrollbar,
 #result_list td:nth-child(3)::-webkit-scrollbar,
 #subtitle_result_list td:nth-child(2)::-webkit-scrollbar { 
     display: none; 
@@ -106,8 +106,10 @@ cursor:pointer;
 .transfer_name{
     position: absolute;
     margin-left: 5px;
-    width: 580px;
-
+    width: 500px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
 .transfer_progress{
@@ -116,7 +118,10 @@ cursor:pointer;
 }
 
 .edit_transfer{
-    float: right;
+    /*float: right;*/
+    position: absolute;
+    right: 0;
+    padding-right: 6px;
 }
 
 #clean_alert{
@@ -326,6 +331,7 @@ a .glyphicon,a .glyphicon:link,a .glyphicon:visited,a .glyphicon:hover,a .glyphi
 a .glyphicon{
     font-size: 12px;
     margin-right: 2px;
+    margin-bottom: 2px;
 }
 
 #tab_files td, #result_list td{

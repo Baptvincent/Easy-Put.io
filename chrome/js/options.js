@@ -16,6 +16,9 @@ $(document).ready(function() {
             case 'ekbocpjgbpkkheehgnimdnkmkapkagap'://store
                 client_id = '893';
             break;
+            default:
+                client_id = '1117';
+            break;
         }
             
         window.location = "https://api.put.io/v2/oauth2/authenticate?client_id="+client_id+"&response_type=token&redirect_uri=chrome-extension://"+extension_id+"/options.html"
