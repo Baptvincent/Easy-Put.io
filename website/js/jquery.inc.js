@@ -314,7 +314,8 @@ $(document).ready(function() {
         $("#folder_id").html('<option value="loading">Loading...</option>')
         $("#folder_id").append('<option value="0">/</option>')
         Putio_Function.count='0';
-        Putio_Function.folderList('','0','#folder_id',function(data){
+        Putio_Function.listFolder('','0','#folder_id',function(data){
+            Putio_Function.folderList = $("#folder_id").html();
             $("#folder_id option[value='loading']").remove();
             $('#folder_id').prop('disabled', false);
         });
@@ -578,7 +579,8 @@ $(document).ready(function() {
         $(".default_folder_list").html('<option value="loading">Loading...</option>')
         $(".default_folder_list").append('<option value="0">/</option>')
         Putio_Function.count='0';
-        Putio_Function.folderList('','0','.default_folder_list',function(data){
+        Putio_Function.listFolder('','0','.default_folder_list',function(data){
+            Putio_Function.folderList = $(".default_folder_list").html();
             $(".default_folder_list option[value='loading']").remove();
             $('#folder_id_all option[value="'+localStorage["default_folder_id"]+'"]').prop("selected",true);
             $('#folder_id_movies option[value="'+localStorage["default_movies_folder_id"]+'"]').prop("selected",true);

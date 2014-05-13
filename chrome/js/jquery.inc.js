@@ -267,7 +267,8 @@ $(document).ready(function() {
         $("#folder_id").html('<option value="loading">Loading...</option>')
         $("#folder_id").append('<option value="0">/</option>')
         Putio_Function.count='0';
-        Putio_Function.folderList('','0','#folder_id',function(data){
+        Putio_Function.listFolder('','0','#folder_id',function(data){
+            Putio_Function.folderList = $("#folder_id").html();
             $("#folder_id option[value='loading']").remove();
             $('#folder_id').prop('disabled', false);
         });
