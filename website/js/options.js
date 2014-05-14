@@ -1,4 +1,8 @@
 $(document).ready(function() {
+    if(localStorage["hide_badge"]=="yes")
+        $('#hide_badge').prop('checked', true);
+
+
     $(document.body).on('click', '#connect' ,function(e){
         
         extension_id = chrome.i18n.getMessage("@@extension_id");
@@ -39,6 +43,15 @@ $(document).ready(function() {
         $('#disconnect').attr('id','connect')
         $('#connect').text('Connect to Put.io')
         $('#token_input').val('');
+    });
+
+    $(document.body).on('click', '#hide_badge' ,function(e){
+        if($('#hide_badge').prop('checked'))
+            localStorage["hide_badge"]="yes";
+        else
+            localStorage["hide_badge"]="no";
+
+        _gaq.push(['_trackEvent', 'background', 'hide_badge', localStorage["hide_badge"]]);
     });
     
     $(window).on('hashchange', function(e){

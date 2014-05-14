@@ -189,6 +189,9 @@ Background = {
             localStorage.removeItem("putio_token");
         }
 
+        if(!localStorage["hide_badge"])
+            localStorage["hide_badge"]="no";
+
         clearTimeout(this.time_start);
         Storage.getData(function(storage){
             if(storage["putio_token"]){
@@ -204,7 +207,15 @@ Background = {
                             Background.start();
                         }, 3600000);
                         clearTimeout(Background.time_notif);
-                        Background.badge();
+                        
+                        if(localStorage["hide_badge"]=="no")
+                            Background.badge();
+                        else{
+                            chrome.browserAction.setBadgeText({
+                                'text':''
+                            });
+                        }
+
                         chrome.contextMenus.removeAll()
                         var contexts = ["selection","link"];
                         var url;
