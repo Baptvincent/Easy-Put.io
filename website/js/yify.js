@@ -7,7 +7,7 @@
  */
 
 var RESULT_LIMIT = 20;
-var SORT_BY = "date";
+var SORT_BY = "date_added";
 
 jQuery.extend({
     postJSON: function( url, data, callback) {
@@ -22,11 +22,11 @@ Yify = {
          list : function(page,output) {
             Yify.page=page;
                 var params = {
-                    "set": page,
+                    "page": page,
                     "limit": RESULT_LIMIT,
-                    "sort":SORT_BY,
+                    "sort_by":SORT_BY,
                 };
-            Yify._request('list',params,'GET',function(data){
+            Yify._request('list_movies',params,'GET',function(data){
                 output(data);
             });
         }
@@ -34,7 +34,7 @@ Yify = {
 
     _request : function(method, params, type,output) {
         $('#spinner').show();
-        var API_SERVER  = "http://yify-torrents.com/api/";        
+        var API_SERVER  = "https://yts.ag/api/v2/";        
 
         var url=API_SERVER+method+".json";
         

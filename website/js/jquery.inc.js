@@ -242,12 +242,12 @@ $(document).ready(function() {
                 if ($('#pb_url').val())
                     localStorage["pb_url"]=$('#pb_url').val();
                 else
-                    localStorage["pb_url"]="http://thepiratebay.sx";
+                    localStorage["pb_url"]="https://thepiratebay.vg";
 
                 if ($('#kat_url').val())
                     localStorage["kat_url"]=$('#kat_url').val();
                 else
-                    localStorage["kat_url"]="http://kickass.to";
+                    localStorage["kat_url"]="https://kat.cr";
 
                 if ($('#old_api').is(':checked')){
                     localStorage["old_api"]="true";
@@ -527,7 +527,7 @@ $(document).ready(function() {
     });
 
     $(document.body).on('click', '#go_to_yify' ,function(e){
-        url = 'http://yify-torrents.com/'
+        url = 'https://yts.ag/'
         _gaq.push(['_trackEvent', 'search tab', 'click', 'Go To YIFY']);
         chrome.tabs.create({
                 url:url

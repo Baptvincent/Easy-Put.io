@@ -205,12 +205,16 @@ Putio_Function = {
 
     displayLastMovies : function(result){
 
+        console.log(result);
+        console.log(result.data);
+        console.log(result.data.movies);
+
         var content='';
         if (result.error){
             content+='<div class="alert alert-danger"><h4>Sorry!</h4>';
             content+=result.status+' '+result.statusText+'<div>';
         }
-        else if(result.MovieList.length>0){
+        else if(result.data.movies.length>0){
 
             Yify.page=parseInt(Yify.page)
 
@@ -235,19 +239,33 @@ Putio_Function = {
             content+='</tfoot>';
 
             content+='<tbody>';
-             $.each(result.MovieList,function(index, value){
+             $.each(result.data.movies,function(index, value){
+                downloadButtons = "";
+                torrentsInfo = "";
+                genres = "";
+
+                $.each(value.genres,function(genreIndex, genreValue){
+                    genres+=genreValue+'/';
+                })
+                genres = genres.substring(0, genres.length-1);
+                $.each(value.torrents,function(torrentIndex, torrentValue){
+                    downloadButtons+='<button class="btn btn-default btn-xs send_to_putio" from="YIFY" type="button" magnet="'+torrentValue.url+'">'+torrentValue.quality+'</button>';
+                    torrentsInfo+='<strong>'+torrentValue.quality+': </strong></br>';
+                    torrentsInfo+='&nbsp&nbspSize: '+torrentValue.size+'</br>';
+                    torrentsInfo+='&nbsp&nbspPeers: '+torrentValue.peers+' Seeds: '+torrentValue.seeds+'</br>';
+                })
+
+
                 info='<td class="%myclass%" style="width: 17%">';
-                info+='<img src="'+value.CoverImage+'" imdb_id="'+value.ImdbCode+'" class="thumbnail_yify"/>';
+                info+='<img src="'+value.medium_cover_image+'" imdb_id="'+value.imdb_code+'" class="thumbnail_yify"/>';
                 info+='</td>';
                 info+='<td class="%myclass%" style="width: 33%">';
-                info+='<h5><strong>'+value.MovieTitle+'</strong></h5>';
-                info+='<strong>Size : </strong>'+value.Size+'</br>';
-                info+='<strong>Quality : </strong>'+value.Quality+'</br>';
-                info+='<strong>Genre : </strong>'+value.Genre+'</br>';
-                info+='<strong>IMDB Rating : </strong>'+value.MovieRating+'</br>';
-                info+='<strong>Peers: </strong>'+value.TorrentPeers+' <strong>Seeds: </strong>'+value.TorrentSeeds+'</br>';
-                info+='<button class="btn btn-default btn-xs show_on_imdb" type="button" url="'+value.ImdbLink+'">View On IMDB</button>';
-                info+='<button class="btn btn-default btn-xs send_to_putio" from="YIFY" type="button" magnet="'+value.TorrentUrl+'">Send to Put.io</button>';
+                info+='<h5><strong>'+value.title_long+'</strong></h5>';
+                info+='<strong>Genre: </strong>'+genres+'</br>';
+                info+='<strong>IMDB Rating: </strong>'+value.rating+'</br>';
+                info+=torrentsInfo;
+                info+='<button class="btn btn-default btn-xs show_on_imdb" type="button" url="http://www.imdb.com/title/'+value.imdb_code+'/">View On IMDB</button></br>';
+                info+=downloadButtons;
                 info+='</td>';
 
                 if(index%2==0){
@@ -267,7 +285,7 @@ Putio_Function = {
         }
         $("#yify_result").html(content);
         $(".pagination").pagination({
-            items: result.MovieCount,
+            items: result.data.movie_count,
             itemsOnPage: 20,
             displayedPages:5,
             edges:1,
@@ -557,9 +575,9 @@ Putio_Function = {
             case 'search':
                 $("#content").html('<div id="tab_search"></div>');
                 if(!localStorage["kat_url"])
-                    localStorage["kat_url"]="http://kickass.to"
+                    localStorage["kat_url"]="https://kat.cr"
                 if(!localStorage["pb_url"])
-                    localStorage["pb_url"]="http://thepiratebay.sx"
+                    localStorage["pb_url"]="https://thepiratebay.vg"
                 this.search(function(data){
                     $("#send_link").focus()
                     $("#search_title").focus()
