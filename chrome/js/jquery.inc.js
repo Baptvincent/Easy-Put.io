@@ -62,11 +62,7 @@ $(document).ready(function() {
         var id = $(this).attr("value");
         var download_url = "https://api.put.io/v2/files/"+id+"/download";
         _gaq.push(['_trackEvent', 'files tab', 'click', 'File']);
-        chrome.tabs.getSelected(undefined,function(data){
-            chrome.tabs.update(data.id, {
-                url:download_url
-            });
-        });
+        Putio_Function.download(download_url);
     });
 
     $(document.body).on('click', '#copy_links' ,function(e){
@@ -148,17 +144,14 @@ $(document).ready(function() {
             if(data.status!='ERROR'){
                 _gaq.push(['_trackEvent', 'transfers tab', 'click', 'Download File']);
                 if(data.file.content_type=='application/x-directory'){
-                    var download_url = "https://api.put.io/v2/files/zip?file_ids="+fileId;
+                    //var download_url = "https://api.put.io/v2/files/zip?file_ids="+fileId;
                     //var download_url = "https://put.io/v2/files/zip?file_ids="+fileId;
+                    Putio_Function.downloadZip(fileId);
                 }
                 else{
                     var download_url = "https://api.put.io/v2/files/"+fileId+"/download";
+                    Putio_Function.download(download_url);
                 }
-                chrome.tabs.getSelected(undefined,function(data){
-                    chrome.tabs.update(data.id, {
-                        url:download_url
-                    });
-                });
             }
         })
     });
@@ -302,12 +295,7 @@ $(document).ready(function() {
         });
         ids=ids.slice(0,-1);
         if(ids){
-        var download_url = "https://api.put.io/v2/files/zip?file_ids="+ids;
-        chrome.tabs.getSelected(undefined,function(data){
-            chrome.tabs.update(data.id, {
-                url:download_url
-            });
-        });
+            Putio_Function.downloadZip(ids);
         }
     });
 

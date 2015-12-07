@@ -356,3 +356,14 @@ a .glyphicon{
 .form-group{
     margin-bottom: 0;
 }
+
+.tooltip-inner {
+    white-space:pre-wrap;
+}
+.show_on_imdb img:hover{
+    cursor:pointer;
+}
+
+.show_on_imdb{
+    cursor:pointer;
+}

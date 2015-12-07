@@ -28,6 +28,21 @@ Putio_Function = {
         }
     },
 
+    checkZip : function(zip_id){
+        Putio.Zips.info(zip_id,function(data){
+            if (data.url){
+                Putio_Function.download(data.url);
+            }
+                
+
+            else{
+                setTimeout(function () {
+                    checkZip(zip_id);
+                }, 2000);
+            }
+        })
+    },
+
     copy_links : function(download_links,link_element,color){
         Putio.Account.settings(function(data){
             if (data.settings.routing != localStorage['default_routing']){
@@ -46,22 +61,47 @@ Putio_Function = {
     },
 
     download : function(download_url){
-        Putio.Account.settings(function(data){
-            if (data.settings.routing != localStorage['default_routing']){
-                Putio.Account.change_route(localStorage['default_routing'],function(data){
-                    chrome.tabs.getSelected(undefined,function(data){
-                        chrome.tabs.update(data.id, {
-                            url:download_url
+        Storage.getData(function(storage){
+            var ACCESS_TOKEN = storage["putio_token"];
+
+            Putio.Account.settings(function(data){
+                if (data.settings.routing != localStorage['default_routing']){
+                    Putio.Account.change_route(localStorage['default_routing'],function(data){
+
+                        if(localStorage["ask_save"]=="yes"){
+                            chrome.downloads.download({
+                            url:download_url+"?oauth_token="+ACCESS_TOKEN,saveAs:!0},function(){})
+                        }
+                        else{
+                            chrome.tabs.getSelected(undefined,function(data){
+                                chrome.tabs.update(data.id, {
+                                    url:download_url+"?oauth_token="+ACCESS_TOKEN
+                                });
+                            });
+                        }
+                    })
+                }
+                else{
+                    if(localStorage["ask_save"]=="yes"){
+                        chrome.downloads.download({
+                        url:download_url+"?oauth_token="+ACCESS_TOKEN,saveAs:!0},function(){})
+                    }
+                    else{
+                        chrome.tabs.getSelected(undefined,function(data){
+                            chrome.tabs.update(data.id, {
+                                url:download_url+"?oauth_token="+ACCESS_TOKEN
+                            });
                         });
-                    });
-                })
+                    }
             }
-            else{
-                chrome.tabs.getSelected(undefined,function(data){
-                    chrome.tabs.update(data.id, {
-                        url:download_url
-                    });
-                });
+            })
+        })
+    },
+
+    downloadZip : function(ids){
+        Putio.Files.zip(ids,function(data){
+            if(data.status=="OK"){
+                Putio_Function.checkZip(data.zip_id);
             }
         })
     },
@@ -245,14 +285,11 @@ Putio_Function = {
                 genres = "";
 
                 $.each(value.genres,function(genreIndex, genreValue){
-                    genres+=genreValue+'/';
+                    genres+=genreValue+' / ';
                 })
-                genres = genres.substring(0, genres.length-1);
+                genres = genres.substring(0, genres.length-3);
                 $.each(value.torrents,function(torrentIndex, torrentValue){
-                    downloadButtons+='<button class="btn btn-default btn-xs send_to_putio" from="YIFY" type="button" magnet="'+torrentValue.url+'">'+torrentValue.quality+'</button>';
-                    torrentsInfo+='<strong>'+torrentValue.quality+': </strong></br>';
-                    torrentsInfo+='&nbsp&nbspSize: '+torrentValue.size+'</br>';
-                    torrentsInfo+='&nbsp&nbspPeers: '+torrentValue.peers+' Seeds: '+torrentValue.seeds+'</br>';
+                    downloadButtons+='<button html="true" data-toggle="tooltip" data-placement="top" title="" data-original-title="Size: '+torrentValue.size+'\nPeers: '+torrentValue.peers+'\nSeeds: '+torrentValue.seeds+'" class="btn btn-default btn-xs send_to_putio" from="YIFY" type="button" magnet="'+torrentValue.url+'">'+torrentValue.quality+'</button>';
                 })
 
 
@@ -262,9 +299,7 @@ Putio_Function = {
                 info+='<td class="%myclass%" style="width: 33%">';
                 info+='<h5><strong>'+value.title_long+'</strong></h5>';
                 info+='<strong>Genre: </strong>'+genres+'</br>';
-                info+='<strong>IMDB Rating: </strong>'+value.rating+'</br>';
-                info+=torrentsInfo;
-                info+='<button class="btn btn-default btn-xs show_on_imdb" type="button" url="http://www.imdb.com/title/'+value.imdb_code+'/">View On IMDB</button></br>';
+                info+='<img src="img/logo-imdb.svg" class="show_on_imdb" url="http://www.imdb.com/title/'+value.imdb_code+'/" > : '+value.rating+'</br>';
                 info+=downloadButtons;
                 info+='</td>';
 
@@ -284,6 +319,7 @@ Putio_Function = {
             content+='</table>';
         }
         $("#yify_result").html(content);
+        $('[data-toggle="tooltip"]').tooltip({'delay': { show: 200, hide: 200 }});
         $(".pagination").pagination({
             items: result.data.movie_count,
             itemsOnPage: 20,

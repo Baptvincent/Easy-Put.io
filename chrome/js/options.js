@@ -2,6 +2,9 @@ $(document).ready(function() {
     if(localStorage["hide_badge"]=="yes")
         $('#hide_badge').prop('checked', true);
 
+    if(localStorage["ask_save"]=="yes")
+        $('#ask_save').prop('checked', true);
+
     $(document.body).on('click', '#connect' ,function(e){
         
         extension_id = chrome.i18n.getMessage("@@extension_id");
@@ -51,6 +54,15 @@ $(document).ready(function() {
             localStorage["hide_badge"]="no";
 
         _gaq.push(['_trackEvent', 'background', 'hide_badge', localStorage["hide_badge"]]);
+    });
+    
+    $(document.body).on('click', '#ask_save' ,function(e){
+        if($('#ask_save').prop('checked'))
+            localStorage["ask_save"]="yes";
+        else
+            localStorage["ask_save"]="no";
+
+        _gaq.push(['_trackEvent', 'background', 'ask_save', localStorage["ask_save"]]);
     });
     
     $(window).on('hashchange', function(e){

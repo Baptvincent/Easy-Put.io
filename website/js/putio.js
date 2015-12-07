@@ -151,6 +151,23 @@ Putio = {
             Putio._request('files', 'get-download-links', params,'POST',function(data){
                 output(data);
             });
+        },
+        zip : function(ids,output) {
+            var params = {
+                'file_ids' : ids
+            };
+            Putio._request('files', 'zip', params,'GET',function(data){
+                output(data);
+            });
+        }
+    },
+
+    Zips : {
+        info : function(id,output) {
+
+            Putio._request('zips', id, '','GET',function(data){
+                output(data);
+            });
         }
     },
 

@@ -28,6 +28,21 @@ Putio_Function = {
         }
     },
 
+    checkZip : function(zip_id){
+        Putio.Zips.info(zip_id,function(data){
+            if (data.url){
+                Putio_Function.download(data.url);
+            }
+                
+
+            else{
+                setTimeout(function () {
+                    checkZip(zip_id);
+                }, 2000);
+            }
+        })
+    },
+
     copy_links : function(download_links,link_element,color){
         background=chrome.extension.getBackgroundPage();
         background.Background.copyToClipboard(download_links);
@@ -40,6 +55,31 @@ Putio_Function = {
         content+='<p class="text-center"><button class="btn btn-lg btn-primary" id="get_full_extension" type="button" style="margin-right:10px;">Get Full Extension</button><button class="btn btn-lg btn-primary" id="donate_btn" type="button">Buy Me a Beer</button></p>';
         content+='</div>';
         $("#tab_donate").html(content);
+    },
+
+    download : function(download_url){
+        Storage.getData(function(storage){
+            var ACCESS_TOKEN = storage["putio_token"];
+            if(localStorage["ask_save"]=="yes"){
+                chrome.downloads.download({
+                url:download_url+"?oauth_token="+ACCESS_TOKEN,saveAs:!0},function(){})
+            }
+            else{
+                chrome.tabs.getSelected(undefined,function(data){
+                    chrome.tabs.update(data.id, {
+                        url:download_url+"?oauth_token="+ACCESS_TOKEN
+                    });
+                });
+            }
+        })
+    },
+
+    downloadZip : function(ids){
+        Putio.Files.zip(ids,function(data){
+            if(data.status=="OK"){
+                Putio_Function.checkZip(data.zip_id);
+            }
+        })
     },
 
     listFolder:function(padding, folder_id, select, callback){
