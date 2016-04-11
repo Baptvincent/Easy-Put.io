@@ -175,7 +175,6 @@ Putio_Function = {
     },
 
     displayKatResult : function(result){
-        console.log(result)
         var content='';
 
         if (result.error){
@@ -245,9 +244,9 @@ Putio_Function = {
 
     displayLastMovies : function(result){
 
-        console.log(result);
-        console.log(result.data);
-        console.log(result.data.movies);
+        //console.log(result);
+        //console.log(result.data);
+        //console.log(result.data.movies);
 
         var content='';
         if (result.error){
@@ -284,14 +283,17 @@ Putio_Function = {
                 torrentsInfo = "";
                 genres = "";
 
-                $.each(value.genres,function(genreIndex, genreValue){
-                    genres+=genreValue+' / ';
-                })
-                genres = genres.substring(0, genres.length-3);
-                $.each(value.torrents,function(torrentIndex, torrentValue){
-                    downloadButtons+='<button html="true" data-toggle="tooltip" data-placement="top" title="" data-original-title="Size: '+torrentValue.size+'\nPeers: '+torrentValue.peers+'\nSeeds: '+torrentValue.seeds+'" class="btn btn-default btn-xs send_to_putio" from="YIFY" type="button" magnet="'+torrentValue.url+'">'+torrentValue.quality+'</button>';
-                })
-
+                if(value.genres){
+                    $.each(value.genres,function(genreIndex, genreValue){
+                        genres+=genreValue+' / ';
+                    })
+                    genres = genres.substring(0, genres.length-3);
+                }
+                if(value.torrents){
+                    $.each(value.torrents,function(torrentIndex, torrentValue){
+                        downloadButtons+='<button html="true" data-toggle="tooltip" data-placement="top" title="" data-original-title="Size: '+torrentValue.size+'\nPeers: '+torrentValue.peers+'\nSeeds: '+torrentValue.seeds+'" class="btn btn-default btn-xs send_to_putio" from="YIFY" type="button" magnet="'+torrentValue.url+'">'+torrentValue.quality+'</button>';
+                    })
+                }
 
                 info='<td class="%myclass%" style="width: 17%">';
                 info+='<img src="'+value.medium_cover_image+'" imdb_id="'+value.imdb_code+'" class="thumbnail_yify"/>';
